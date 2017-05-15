@@ -1,13 +1,6 @@
 const Sequelize = require('Sequelize');
 const config = require('./config');
-const {
-  database: {
-    db,
-    username,
-    password,
-    host
-  }
-} = config;
+const {database: { db, username, password, host}} = config;
 const sequelize = new Sequelize(db, username, password, {
   host: host,
   dialect: 'postgres',
@@ -19,77 +12,6 @@ const sequelize = new Sequelize(db, username, password, {
   }
 });
 
-const User = sequelize.define('users', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  facebookID: {
-    type: Sequelize.STRING
-  },
-  name: {
-    type: Sequelize.STRING
-  },
-  username: {
-    type: Sequelize.STRING
-  },
-  description: {
-    type: Sequelize.STRING
-  },
-  followers: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER),
-    allowNull: true
-  }
-});
-
-const Story = sequelize.define('story', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  date: {
-    type: Sequelize.DATE
-  },
-  likedby: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER)
-  }
-}, {
-  freezeTableName: true
-});
-
-const Stories = sequelize.define('stories', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  date: {
-    type: Sequelize.DATE
-  },
-  url: {
-    type: Sequelize.STRING
-  },
-  viewedby: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER)
-  }
-});
-
-
-const Comments = sequelize.define('comments', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  date: {
-    type: Sequelize.DATE
-  },
-  comment: {
-    type: Sequelize.TEXT
-  }
-});
 
 User.hasMany(Story)
 Story.belongsTo(User)
