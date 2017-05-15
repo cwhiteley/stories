@@ -1,7 +1,7 @@
 module.exports = {
     database: {
-        db: 'farz',
-        username: 'farz',
+        db: 'qasimf01',
+        username: 'qasimf01',
         password: '',
         host: 'localhost'
     }
