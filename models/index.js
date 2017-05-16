@@ -29,7 +29,7 @@ Object.keys(db).forEach(modelName => {
 db.connect = function () {
     return sequelize.authenticate().then(()=> {
         sequelize.sync({
-            force: true
+            force: false
         });
     });
 }
