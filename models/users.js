@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    const User = sequelize.define('users', {
+    const Users = sequelize.define('users', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -16,11 +16,10 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function (models) {
-                console.log('models ', models)
-                User.hasMany(models.Story);
+                Users.hasMany(models.Story);
             }
         }
     });
 
-    return User;
+    return Users;
 };

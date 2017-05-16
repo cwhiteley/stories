@@ -14,7 +14,7 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function (models) {
-                Story.belongsTo(models.User);
+                Story.belongsTo(models.Users);
                 Story.hasMany(models.Stories);
                 Story.hasMany(models.Comments);
             }

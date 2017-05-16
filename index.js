@@ -6,31 +6,6 @@ db.connect().then(() => {
   console.log('could not connect ', e)
 })
 
-// sequelize
-//   .authenticate()
-//   .then(err => {
-//     console.log('Connection has been established successfully.');
-//     Promise.all([
-//       User.sync({
-//         force: true
-//       }),
-//       Story.sync({
-//         force: true
-//       }),
-//       Stories.sync({
-//         force: true
-//       }),
-//       Comments.sync({
-//         force: true
-//       })      
-//     ]).then(() => {
-//       createUsers();
-//     });
-//   })
-//   .catch(err => {
-//     console.error('Unable to connect to the database:', err);
-//   });
-
 // function createUsers() {
 //   User.bulkCreate([{
 //     name: 'David',
