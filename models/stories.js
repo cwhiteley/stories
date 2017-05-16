@@ -8,6 +8,12 @@ module.exports = function (sequelize, DataTypes) {
         date: DataTypes.DATE,
         url: DataTypes.STRING,
         viewedby: DataTypes.ARRAY(DataTypes.INTEGER)
+    }, {
+        classMethods: {
+            associate: function (models) {
+                Stories.belongsTo(models.Story);
+            }
+        }
     });
 
     return Stories;

@@ -7,6 +7,12 @@ module.exports = function (sequelize, DataTypes) {
         },
         date: DataTypes.DATE,
         comment: DataTypes.TEXT
+    }, {
+        classMethods: {
+            associate: function (models) {
+                Comments.belongsTo(models.Story);
+            }
+        }
     });
 
     return Comments;

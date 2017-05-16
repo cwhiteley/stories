@@ -13,6 +13,13 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             allowNull: true
         }
+    }, {
+        classMethods: {
+            associate: function (models) {
+                console.log('models ', models)
+                User.hasMany(models.Story);
+            }
+        }
     });
 
     return User;
