@@ -1,16 +1,23 @@
 const path = require('path');
 const Sequelize = require('sequelize');
 const config = require('../config');
-const {database: { database, username, password, host}} = config;
-const sequelize = new Sequelize(database, username, password, {
-  host: host,
-  dialect: 'postgres',
-  logging: console.log,
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  }
+const {
+    database: {
+        dbName,
+        username,
+        password,
+        host
+    }
+} = config;
+const sequelize = new Sequelize(dbName, username, password, {
+    host: host,
+    dialect: 'postgres',
+    logging: console.log,
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+    }
 });
 
 let db = {
@@ -32,12 +39,7 @@ function syncModels() {
         force: true
     };
 
-    return Promise.all([
-        db.Users.sync(overwrite),
-        db.Story.sync(overwrite),
-        db.Stories.sync(overwrite),
-        db.Comments.sync(overwrite)
-    ]);
+    return db.sequelize.sync(overwrite);
 }
 
 db.connect = function () {
