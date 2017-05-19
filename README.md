@@ -1,6 +1,39 @@
 # stories
 stories server
 
+```
+{
+  user {
+    id: 1,
+    facebookID: 1,
+    name: "David",
+    username: "david001",
+    description: "android",
+    followers: [],
+    story: model.story
+  }
+}
+
+{
+  story {
+   id: 1,
+   date: 19-05-2017,
+   likeby: [],
+   stories: model.stories,
+   comments: model.comments
+  }
+}
+
+{
+  stories: {
+    id: 1,
+    date: 19-05-2017,
+    url: "http://awsurl.com/image.jpg",
+    viewedby: [],
+  }
+}
+```
+
 
   | POST]      |
 | ------------- |
