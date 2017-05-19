@@ -28,11 +28,11 @@ Object.keys(db).forEach(modelName => {
 
 db.connect = function () {
     return sequelize.authenticate().then(()=> {
-        sequelize.sync({
+        return sequelize.sync({
             force: false
         });
     });
-}
+};
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

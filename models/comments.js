@@ -5,6 +5,9 @@ module.exports = function (sequelize, DataTypes) {
             autoIncrement: true,
             primaryKey: true
         },
+        userid: {
+            type: DataTypes.INTEGER
+        },
         date: DataTypes.DATE,
         comment: DataTypes.TEXT
     }, {
