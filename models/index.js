@@ -14,10 +14,10 @@ const sequelize = new Sequelize(dbname, username, password, {
 });
 
 let db = {
-    Users: sequelize.import(path.join(__dirname, './users')),
-    Story: sequelize.import(path.join(__dirname, './story')),
-    Stories: sequelize.import(path.join(__dirname, './stories')),
-    Comments: sequelize.import(path.join(__dirname, './comments'))
+    users: sequelize.import(path.join(__dirname, './users')),
+    story: sequelize.import(path.join(__dirname, './story')),
+    stories: sequelize.import(path.join(__dirname, './stories')),
+    comments: sequelize.import(path.join(__dirname, './comments'))
 };
 
 Object.keys(db).forEach(modelName => {

@@ -14,9 +14,9 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function (models) {
-                Story.belongsTo(models.Users);
-                Story.hasMany(models.Stories);
-                Story.hasMany(models.Comments);
+                Story.Users = Story.belongsTo(models.users);
+                Story.Stories = Story.hasMany(models.stories);
+                Story.Comments = Story.hasMany(models.comments);
             }
         }
     });

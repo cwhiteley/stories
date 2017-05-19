@@ -11,7 +11,7 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function (models) {
-                Stories.belongsTo(models.Story);
+                Stories.Story = Stories.belongsTo(models.story);
             }
         }
     });
