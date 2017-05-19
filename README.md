@@ -32,6 +32,15 @@ stories server
     viewedby: [],
   }
 }
+
+{
+  comments: {
+    id: 1,
+    userid: 1,
+    date: 19-05-2017,
+    comment: "hello",
+  }
+}
 ```
 
 
