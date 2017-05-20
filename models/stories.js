@@ -6,12 +6,15 @@ module.exports = function (sequelize, DataTypes) {
             primaryKey: true
         },
         date: DataTypes.DATE,
-        url: DataTypes.STRING,
-        viewedby: DataTypes.ARRAY(DataTypes.INTEGER)
+        likedby: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER)
+        }
     }, {
         classMethods: {
             associate: function (models) {
-                Stories.Story = Stories.belongsTo(models.story);
+                Stories.Users = Stories.belongsTo(models.users);
+                Stories.StoryFragments = Stories.hasMany(models.storyfragments);
+                Stories.Comments = Stories.hasMany(models.comments);
             }
         }
     });

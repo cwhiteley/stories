@@ -3,7 +3,7 @@ const graphqlHTTP = require('express-graphql');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const schema = require('./models/graphQLSchema');
+const {schema} = require('./models/graphQLSchema');
 
 // const index = require('./routes/index');
 // const users = require('./routes/users');
@@ -42,36 +42,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
-
-// db.connect().then(() => {
-//   console.log('Connection has been established successfully.');
-// }).catch((e) => {
-//   console.log('could not connect ', e)
-// })
-
-// function createUsers() {
-//   db.Users.bulkCreate([{
-//     name: 'David',
-//     username: 'david001',
-//     facebookID: '001',
-//     description: 'robot model #1',
-//   }, {
-//     name: 'Walter',
-//     username: 'walter001',
-//     facebookID: '002',
-//     description: 'robot model #2',
-//   }]).then(() => {
-//     return db.Users.findAll();
-//   }).then((users) => {
-//     db.Story.bulkCreate([{
-//       date: new Date(),
-//       userId: users[0].id
-//     },{
-//       date: new Date(),
-//       userId: users[0].id
-//     }]).then(()=> { 
-//       return db.Story.findAll();
-//     });
-//   });
-// }

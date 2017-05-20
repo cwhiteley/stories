@@ -2,19 +2,10 @@ const { sequelize: { models } } = require('./index.js');
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList, GraphQLSchema } = require('graphql');
 const { resolver } = require('graphql-sequelize');
 
-const StoriesViewedBy = new GraphQLObjectType({
-    name: 'StoriesViewedBy',
-    description: 'IDs of users that viewed this stories fragment',
-    fields: {
-        id: {
-            type: GraphQLInt,
-        }
-    }
-});
 
-const Stories = new GraphQLObjectType({
-    name: 'Stories',
-    description: 'Stories details',
+const StoryFragments = new GraphQLObjectType({
+    name: 'StoryFragments',
+    description: 'StoryFragments details',
     fields: {
         id: {
             type: new GraphQLNonNull(GraphQLInt),
@@ -26,7 +17,7 @@ const Stories = new GraphQLObjectType({
             type: GraphQLString,
         },
         viewedby: {
-            type: new GraphQLList(StoriesViewedBy),
+            type: new GraphQLList(GraphQLInt),
         }
     }
 });
@@ -50,19 +41,10 @@ const Comments = new GraphQLObjectType({
     }
 });
 
-const StoryLikedBy = new GraphQLObjectType({
-    name: 'StoryLikedBy',
-    description: 'IDs of users that like this story',
-    fields: {
-        id: {
-            type: GraphQLInt,
-        }
-    }
-});
 
-const Story = new GraphQLObjectType({
-    name: 'Story',
-    description: 'Story details',
+const Stories = new GraphQLObjectType({
+    name: 'Stories',
+    description: 'Stories details',
     fields: {
         id: {
             type: new GraphQLNonNull(GraphQLInt),
@@ -71,29 +53,22 @@ const Story = new GraphQLObjectType({
             type: GraphQLString,
         },
         likedby: {
-            type: new GraphQLList(StoryLikedBy),
+            type: new GraphQLList(GraphQLInt),
         },
-        stories: {
-            type: new GraphQLList(Stories),
-            resolve: resolver(models.story.Stories)
+        userId: {
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+        storyfragments: {
+            type: new GraphQLList(StoryFragments),
+            resolve: resolver(models.stories.StoryFragments)
         },
         comments: {
             type: new GraphQLList(Comments),
-            resolve: resolver(models.story.Comments)
+            resolve: resolver(models.stories.Comments)
         }
     }
 });
 
-
-const UserFollowers = new GraphQLObjectType({
-    name: 'UserFollowers',
-    description: 'IDs of users that follow this user',
-    fields: {
-        id: {
-            type: GraphQLInt,
-        }
-    }
-});
 
 const User = new GraphQLObjectType({
     name: 'User',
@@ -115,30 +90,65 @@ const User = new GraphQLObjectType({
             type: GraphQLString,
         },
         followers: {
-            type: new GraphQLList(UserFollowers),
+            type: new GraphQLList(GraphQLInt),
         },
         story: {
-            type: new GraphQLList(Story),
-            resolve: resolver(models.users.Story)
+            type: new GraphQLList(Stories),
+            resolve: resolver(models.users.Stories)
         }
     }
 });
 
+/****** QUERIES  */
+ const UserQuery = {
+     type: User,
+     name: 'User',
+     args: {
+         id: {
+             description: 'ID of the user',
+             type: new GraphQLNonNull(GraphQLInt)
+         }
+     },
+     resolve: resolver(models.users)
+ }
 
-// const Schema = new GraphQLSchema({
-//   query: new GraphQLObjectType({
-//     name: 'This is root query',
-//     fields: {
-//       user: {
-//         type: new GraphQLList(User),
-//         args: {
-//           id: {
-//             description: 'id of the user',
-//             type: new GraphQLNonNull(GraphQLInt)
-//           }
-//         },
-//         resolve: resolver(User)
-//       }
-//     }
-//   })
-// });
+ const UsersQuery = {
+     type: new GraphQLList(User),
+     name: 'Users',
+     args: {
+         id: {
+             description: 'ID of the user',
+             type: new GraphQLList(GraphQLInt)
+         }
+     },
+     resolve: resolver(models.users)
+ }
+
+
+  const StoriesQuery = {
+     type: new GraphQLList(Stories),
+     name: 'Stories',
+     args: {
+         userId: {
+             description: 'ID of the story',
+             type: new GraphQLNonNull(GraphQLInt)
+         }
+     },
+     resolve: resolver(models.stories)
+ }
+/****** QUERIES  */
+
+
+const Schema = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: 'Schema',
+    description: 'APIs exposed as GraphQL',
+    fields: {
+      user: UserQuery,
+      users: UsersQuery,
+      stories: StoriesQuery
+    }
+  })
+});
+
+module.exports.schema = Schema;

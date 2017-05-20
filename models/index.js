@@ -15,8 +15,8 @@ const sequelize = new Sequelize(dbname, username, password, {
 
 let db = {
     users: sequelize.import(path.join(__dirname, './users')),
-    story: sequelize.import(path.join(__dirname, './story')),
     stories: sequelize.import(path.join(__dirname, './stories')),
+    storyfragments: sequelize.import(path.join(__dirname, './storyfragments')),
     comments: sequelize.import(path.join(__dirname, './comments'))
 };
 
@@ -29,7 +29,9 @@ Object.keys(db).forEach(modelName => {
 db.connect = function () {
     return sequelize.authenticate().then(()=> {
         return sequelize.sync({
-            force: false
+            force: true
+        }).then(()=> {
+            createUsers();
         });
     });
 };
@@ -38,3 +40,30 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
+
+function createUsers() {
+  sequelize.models.users.bulkCreate([{
+    name: 'David',
+    username: 'david001',
+    facebookID: '001',
+    description: 'robot model #1',
+  }, {
+    name: 'Walter',
+    username: 'walter001',
+    facebookID: '002',
+    description: 'robot model #2',
+  }]).then(() => {
+    return sequelize.models.users.findAll();
+  }).then((users) => {
+    sequelize.models.stories.bulkCreate([{
+      date: new Date(),
+      userId: users[0].id
+    },{
+      date: new Date(),
+      userId: users[0].id
+    }]).then(()=> { 
+      return sequelize.models.stories.findAll();
+    });
+  });
+}
