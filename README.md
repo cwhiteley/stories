@@ -10,7 +10,6 @@ stories server
     username: "david001",
     description: "android",
     followers: [],
-    story: model.story
   }
 }
 
@@ -19,6 +18,7 @@ stories server
    id: 1,
    date: 19-05-2017,
    likeby: [],
+   userId: 1
    stories: model.stories,
    comments: model.comments
   }
