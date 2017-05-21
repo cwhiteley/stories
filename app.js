@@ -4,11 +4,11 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const {schema} = require('./models/graphQLSchema');
+const login = require('./routes/login');
 
-// const index = require('./routes/index');
 // const users = require('./routes/users');
 // app.use('/', index);
-// app.use('/users', users);
+
 
 const app = express();
 
@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use('/login', login);
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
@@ -38,7 +39,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error'); // wont work ! send status code ono
+  //res.render('error'); // wont work ! send status code ono
 });
 
 module.exports = app;
