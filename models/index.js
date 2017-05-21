@@ -56,14 +56,18 @@ function createUsers() {
   }]).then(() => {
     return sequelize.models.users.findAll();
   }).then((users) => {
-    sequelize.models.stories.bulkCreate([{
+    return sequelize.models.stories.bulkCreate([{
       date: new Date(),
-      userId: users[0].id
+      userId: users[0].id,
+      likedby: [2]
     },{
       date: new Date(),
-      userId: users[0].id
-    }]).then(()=> { 
-      return sequelize.models.stories.findAll();
+      userId: users[0].id,
+      likedby: [2]
+    }]).then((story)=> { 
+      //return sequelize.models.stories.findAll();
+    }).then((story)=> {
+        
     });
   });
 }
