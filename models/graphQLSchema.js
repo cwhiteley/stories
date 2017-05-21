@@ -114,6 +114,9 @@ const User = new GraphQLObjectType({
         followers: {
             type: new GraphQLList(GraphQLInt),
         },
+        following: {
+            type: new GraphQLList(GraphQLInt),
+        },        
         story: {
             type: new GraphQLList(Stories),
             resolve: resolver(models.users.Stories)
@@ -146,19 +149,41 @@ const User = new GraphQLObjectType({
      resolve: resolver(models.users)
  }
 
+/* for a bunch of userID's give me a bunch of stories */
 
+
+/* FOR USER PROFILE PAGE, for user 1, give me all his stories */
   const StoriesQuery = {
      type: new GraphQLList(Stories),
      name: 'Stories',
      args: {
-         userId: {
-             description: 'ID of the user',
-             type: new GraphQLNonNull(GraphQLInt)
-         }
+         userId: {   
+             description: 'IDs of the user',
+             type: new GraphQLList(GraphQLInt)
+         },
+          limit: {
+            type: GraphQLInt
+          },
+          order: {
+            type: GraphQLString
+          }                           
      },
      resolve: resolver(models.stories)
  }
 
+ /*
+  function(root, args) {
+        return models.stories.findAll({
+         where: {
+             userId: args.userId,
+             date: {
+                 $lt: new Date()
+             }
+         }
+     })}
+     */
+
+/* when you click on a story, give me all its pieces */
   const StoryFragmentsQuery = {
      type: new GraphQLList(StoryFragments),
      name: 'StoryFragments',
@@ -187,3 +212,30 @@ const Schema = new GraphQLSchema({
 });
 
 module.exports.schema = Schema;
+
+/*
+{
+  user(id: 3) {
+    name,
+    following
+  }
+  users(id: [1, 2]) {
+    name,
+    description
+  }
+   stories(userId: 1) {
+    id,
+    date,
+    userId,
+    likedby {
+      username
+    }
+  } 
+  storyfragments(storyId: 1) {
+    id,
+    viewedby {
+      username
+    }
+  }
+}
+*/

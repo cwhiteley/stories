@@ -12,7 +12,11 @@ module.exports = function (sequelize, DataTypes) {
         followers: {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             allowNull: true
-        }
+        },
+        following: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            allowNull: true
+        }        
     }, {
         classMethods: {
             associate: function (models) {

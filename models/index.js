@@ -48,11 +48,20 @@ function createUsers() {
     username: 'david001',
     facebookID: '001',
     description: 'robot model #1',
+    followers: [2]
   }, {
     name: 'Walter',
     username: 'walter001',
     facebookID: '002',
     description: 'robot model #2',
+    followers: [1]
+  }, {
+    name: 'Elizabeth',
+    username: 'liz',
+    facebookID: '003',
+    description: 'shes real',
+    followers: [1,2],
+    following: [1,2]
   }]).then(() => {
     return sequelize.models.users.findAll();
   }).then((users) => {
@@ -64,6 +73,10 @@ function createUsers() {
       date: new Date(),
       userId: users[0].id,
       likedby: [2]
+    },{
+      date: new Date(),
+      userId: 3,
+      likedby: [1,2]
     }]).then((story)=> { 
       return sequelize.models.storyfragments.bulkCreate([{
             date: new Date(),
