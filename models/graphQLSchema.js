@@ -2,6 +2,22 @@ const { sequelize: { models } } = require('./index.js');
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList, GraphQLSchema } = require('graphql');
 const { resolver } = require('graphql-sequelize');
 
+const UserSmall = new GraphQLObjectType({
+    name: 'UserSmall',
+    description: 'Few User details',
+    fields: {
+        id: {
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+        facebookID: {
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+        username: {
+            type: GraphQLString,
+        }
+    }      
+});
+
 const StoryFragments = new GraphQLObjectType({
     name: 'StoryFragments',
     description: 'StoryFragments details',
@@ -19,7 +35,8 @@ const StoryFragments = new GraphQLObjectType({
             type: GraphQLString,
         },
         viewedby: {
-            type: new GraphQLList(GraphQLInt),
+            type: new GraphQLList(UserSmall),
+            resolve: resolver(models.users)
         }
     }
 });
@@ -44,23 +61,6 @@ const Comments = new GraphQLObjectType({
             type: GraphQLString,
         }
     }
-});
-
-
-const UserSmall = new GraphQLObjectType({
-    name: 'UserSmall',
-    description: 'Few User details',
-    fields: {
-        id: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        facebookID: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        username: {
-            type: GraphQLString,
-        }
-    }      
 });
 
 const Stories = new GraphQLObjectType({

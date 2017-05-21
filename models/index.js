@@ -65,7 +65,17 @@ function createUsers() {
       userId: users[0].id,
       likedby: [2]
     }]).then((story)=> { 
-      //return sequelize.models.stories.findAll();
+      return sequelize.models.storyfragments.bulkCreate([{
+            date: new Date(),
+            storyId: 1,
+            url: 'http://www.google.com/',
+            viewedby: [1,2]
+          },{
+            date: new Date(),
+            storyId: 1,
+            url: 'http://www.google.com/',
+            viewedby: [1,2]
+          }]);
     }).then((story)=> {
         
     });
