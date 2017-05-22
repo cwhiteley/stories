@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { sequelize: { models } } = require('../models/index.js');
-
-
+   
 router.get('/:facebookID', function (req, res, next) {
     models.users.find({
         where: {
