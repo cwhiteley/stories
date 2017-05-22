@@ -4,7 +4,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const login = require('./routes/login');
 const graphql = require('./routes/graphql');
-
 const app = express();
 
 app.use(logger('dev'));
@@ -30,7 +29,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  //res.render('error'); // wont work ! send status code ono
+  res.json({error:err}); // wont work ! send status code ono
 });
 
 module.exports = app;

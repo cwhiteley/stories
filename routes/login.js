@@ -1,6 +1,8 @@
 var express = require('express');
+const jwt = require('jsonwebtoken');
 var router = express.Router();
 const { sequelize: { models } } = require('../models/index.js');
+const  { jwt: {secret} } = require('../config');
    
 router.get('/:facebookID', function (req, res, next) {
     models.users.find({
@@ -9,10 +11,14 @@ router.get('/:facebookID', function (req, res, next) {
         },
        raw: true
     }).then((result) => {
-        res.json(result)
+        const user = {
+            id: result.id
+        };
+        const token = jwt.sign(user, secret);
+        return res.json({token});
     }).catch((err) => {
         return next({
-            msg: `unable to query user with id ${facebookid}`,
+            msg: `unable to query user with id ${req.params.facebookID}`,
             statusCode: 500,
             err
         });

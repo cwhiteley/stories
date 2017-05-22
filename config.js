@@ -4,5 +4,8 @@ module.exports = {
         username: 'qasimf01',
         password: '',
         host: 'localhost'
+    },
+    jwt: {
+        secret: 'tempSecret'
     }
 }

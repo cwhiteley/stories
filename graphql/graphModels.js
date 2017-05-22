@@ -2,6 +2,7 @@ const { sequelize: { models } } = require('../models/index.js');
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList } = require('graphql');
 const { resolver } = require('graphql-sequelize');
 
+/** might not need this because fetching user also fetches stories */
 const UserSmall = new GraphQLObjectType({
     name: 'UserSmall',
     description: 'Few User details',
