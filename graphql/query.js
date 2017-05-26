@@ -1,5 +1,5 @@
 const { sequelize: { models } } = require('../models/index.js');
-const { UserType, StoriesType, StoryFragmentsType, CommentsType } = require('./schema');
+const { UserType, StoriesType, StoryFragmentsType, CommentsType } = require('./types');
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList, GraphQLSchema } = require('graphql');
 const { resolver } = require('graphql-sequelize');
 
@@ -67,23 +67,13 @@ const StoryFragmentsQuery = {
     },
     resolve: resolver(models.storyfragments)
 }
-/****** QUERIES  */
 
-
-const Query = new GraphQLSchema({
-    query: new GraphQLObjectType({
-        name: 'Schema',
-        description: 'APIs exposed as GraphQL',
-        fields: {
-            user: UserQuery,
-            users: UsersQuery,
-            stories: StoriesQuery,
-            storyfragments: StoryFragmentsQuery
-        }
-    })
-});
-
-module.exports.query = Query;
+module.exports = {
+    UserQuery,
+    UsersQuery,
+    StoriesQuery,
+    StoryFragmentsQuery
+};
 
 /*
 {

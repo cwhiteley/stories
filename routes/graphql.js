@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const graphqlHTTP = require('express-graphql');
-const { query } = require('../graphql/query');
+const schema = require('../graphql/schema');
 const jwt = require('express-jwt');
 
 router.use(jwt({
@@ -18,7 +18,7 @@ router.use(jwt({
 }));
 
 router.use('/', graphqlHTTP({
-    schema: query,
+    schema: schema,
     rootValue: root,
     graphiql: true,
 }));

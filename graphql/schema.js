@@ -1,133 +1,23 @@
-const { sequelize: { models } } = require('../models/index.js');
-const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList } = require('graphql');
-const { resolver } = require('graphql-sequelize');
+const { UserQuery, UsersQuery, StoriesQuery, StoryFragmentsQuery } = require('./query');
+const { GraphQLObjectType, GraphQLSchema } = require('graphql');
+const { UserMutation } = require('./mutation');
 
-/** might not need this because fetching user also fetches stories */
-const UserSmallType = new GraphQLObjectType({
-    name: 'UserSmall',
-    description: 'Few User details',
-    fields: {
-        id: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        facebookID: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        username: {
-            type: GraphQLString,
+module.exports = new GraphQLSchema({
+    query: new GraphQLObjectType({
+        name: 'Schema',
+        description: 'APIs exposed as GraphQL',
+        fields: {
+            user: UserQuery,
+            users: UsersQuery,
+            stories: StoriesQuery,
+            storyfragments: StoryFragmentsQuery
         }
-    }      
-});
-
-const StoryFragmentsType = new GraphQLObjectType({
-    name: 'StoryFragments',
-    description: 'StoryFragments details',
-    fields: {
-        id: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        storyId: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },        
-        date: {
-            type: GraphQLString,
-        },
-        url: {
-            type: GraphQLString,
-        },
-        viewedby: {
-            type: new GraphQLList(UserSmallType),
-            resolve: resolver(models.users)
+    }),
+    mutation: new GraphQLObjectType({
+        name: 'Schema2',
+        description: 'These are the things we can change',
+        fields: {
+            updateUserDesc: UserMutation
         }
-    }
+    })    
 });
-
-const CommentsType = new GraphQLObjectType({
-    name: 'Comments',
-    description: 'Comments details',
-    fields: {
-        id: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        storyId: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },        
-        userid: {
-            type: new GraphQLNonNull(GraphQLInt),    
-        },
-        date: {
-            type: GraphQLString,
-        },
-        comment: {
-            type: GraphQLString,
-        }
-    }
-});
-
-const StoriesType = new GraphQLObjectType({
-    name: 'Stories',
-    description: 'Stories details',
-    fields: {
-        id: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        date: {
-            type: GraphQLString,
-        },
-        likedby: {
-            type: new GraphQLList(UserSmallType),
-            resolve: resolver(models.users)
-        },
-        userId: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        storyfragments: {
-            type: new GraphQLList(StoryFragmentsType),
-            resolve: resolver(models.stories.StoryFragments)
-        },
-        comments: {
-            type: new GraphQLList(CommentsType),
-            resolve: resolver(models.stories.Comments)
-        }
-    }
-});
-
-
-const UserType = new GraphQLObjectType({
-    name: 'User',
-    description: 'User details',
-    fields: {
-        id: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        facebookID: {
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        name: {
-            type: GraphQLString,
-        },
-        username: {
-            type: GraphQLString,
-        },
-        description: {
-            type: GraphQLString,
-        },
-        followers: {
-            type: new GraphQLList(GraphQLInt),
-        },
-        following: {
-            type: new GraphQLList(GraphQLInt),
-        },        
-        story: {
-            type: new GraphQLList(StoriesType),
-            resolve: resolver(models.users.Stories)
-        }
-    }
-});
-
-module.exports = {
-    UserType,
-    StoriesType,
-    StoryFragmentsType,
-    CommentsType
-}
