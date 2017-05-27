@@ -1,6 +1,6 @@
 const { UserQuery, UsersQuery, StoriesQuery, StoryFragmentsQuery } = require('./query');
 const { GraphQLObjectType, GraphQLSchema } = require('graphql');
-const { UserMutation } = require('./mutation');
+const { UserMutation, AddStoryFragment } = require('./mutation');
 
 module.exports = new GraphQLSchema({
     query: new GraphQLObjectType({
@@ -17,7 +17,8 @@ module.exports = new GraphQLSchema({
         name: 'Schema2',
         description: 'These are the things we can change',
         fields: {
-            updateUserDesc: UserMutation
+            updateUserDesc: UserMutation,
+            addStoryFragment: AddStoryFragment
         }
     })    
 });

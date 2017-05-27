@@ -5,9 +5,11 @@ module.exports = function (sequelize, DataTypes) {
             autoIncrement: true,
             primaryKey: true
         },
-        date: DataTypes.DATE,
+        date: DataTypes.STRING,
         url: DataTypes.STRING,
-        viewedby: DataTypes.ARRAY(DataTypes.INTEGER)
+        viewedby: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER)
+        }
     }, {
         classMethods: {
             associate: function (models) {

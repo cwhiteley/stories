@@ -36,8 +36,7 @@ const StoryFragmentsType = new GraphQLObjectType({
             type: GraphQLString,
         },
         viewedby: {
-            type: new GraphQLList(UserSmallType),
-            resolve: resolver(models.users)
+            type: new GraphQLList(GraphQLInt),
         }
     }
 });
@@ -75,8 +74,7 @@ const StoriesType = new GraphQLObjectType({
             type: GraphQLString,
         },
         likedby: {
-            type: new GraphQLList(UserSmallType),
-            resolve: resolver(models.users)
+            type: new GraphQLList(GraphQLInt)
         },
         userId: {
             type: new GraphQLNonNull(GraphQLInt),

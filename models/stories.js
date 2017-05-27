@@ -5,7 +5,7 @@ module.exports = function (sequelize, DataTypes) {
             autoIncrement: true,
             primaryKey: true
         },
-        date: DataTypes.DATE,
+        date: DataTypes.STRING,
         likedby: {
             type: DataTypes.ARRAY(DataTypes.INTEGER)
         }
