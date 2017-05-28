@@ -21,6 +21,7 @@ module.exports = function (sequelize, DataTypes) {
         classMethods: {
             associate: function (models) {
                 Users.Stories = Users.hasMany(models.stories);
+                Users.Comments = Users.hasMany(models.comments);
             }
         }
     });

@@ -14,8 +14,8 @@ const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLLis
 
 
 //update story - likes - x
-//update story - comments
-//update storyfragment - viewed
+//update story - comments - x
+//update storyfragment - viewed - x
 //update users, follow
 //update users - desc?
 
@@ -188,11 +188,43 @@ const UpdateStoryFragmentViews = {
 };
  
 
+const UpdateStoryComments = {
+    type: CommentsType,
+    description: 'Update story comments',
+    name: 'UpdateStoryComments',
+    args: {
+        storyId: {
+            description: 'ID of the story',
+            type: new GraphQLNonNull(GraphQLInt)
+        },
+        userId: {
+            description: 'ID of the user leaving the comment',
+            type: new GraphQLNonNull(GraphQLInt)
+        },
+        comment: {
+            description: 'Text for the comment',
+            type: GraphQLString
+        }
+    },
+    resolve: function(root, {storyId, userId, comment}) {
+        return models.comments.create({
+             storyId: storyId,
+             userId: userId,
+             comment: comment
+        }).then((result) => {
+          return result.get({
+                plain: true
+            });
+        });
+    }
+};
+
 module.exports = {
     UpdateUserDesc,
     AddStoryFragment,
     UpdateStoryLikes,
-    UpdateStoryFragmentViews
+    UpdateStoryFragmentViews,
+    UpdateStoryComments
 };
 
 /*

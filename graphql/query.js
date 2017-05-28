@@ -1,5 +1,5 @@
 const { sequelize: { models } } = require('../models/index.js');
-const { UserType, StoriesType, StoryFragmentsType, CommentsType } = require('./types');
+const { UserType, UserSmallType, StoriesType, StoryFragmentsType, CommentsType } = require('./types');
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList, GraphQLSchema } = require('graphql');
 const { resolver } = require('graphql-sequelize');
 
@@ -46,15 +46,7 @@ const StoriesQuery = {
     },
     resolve: resolver(models.stories)
 }
-/* function(root, args) {
-       return models.stories.findAll({
-        where: {
-            userId: args.userId,
-            date: {
-                $lt: new Date()
-            }
-        }
-    })}*/
+
 /* when you click on a story, give me all its pieces */
 const StoryFragmentsQuery = {
     type: new GraphQLList(StoryFragmentsType),
@@ -68,36 +60,23 @@ const StoryFragmentsQuery = {
     resolve: resolver(models.storyfragments)
 }
 
+const CommentsQuery = {
+    type: new GraphQLList(CommentsType),
+    name: 'CommentsType',
+    args: {
+        storyId: {
+            description: 'ID of the story',
+            type: new GraphQLNonNull(GraphQLInt)
+        }
+    },
+    resolve: resolver(models.comments)
+}
+
 module.exports = {
     UserQuery,
     UsersQuery,
     StoriesQuery,
-    StoryFragmentsQuery
+    StoryFragmentsQuery,
+    CommentsQuery
 };
 
-/*
-{
-  user(id: 3) {
-    name,
-    following
-  }
-  users(id: [1, 2]) {
-    name,
-    description
-  }
-   stories(userId: 1) {
-    id,
-    date,
-    userId,
-    likedby {
-      username
-    }
-  } 
-  storyfragments(storyId: 1) {
-    id,
-    viewedby {
-      username
-    }
-  }
-}
-*/

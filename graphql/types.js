@@ -51,11 +51,9 @@ const CommentsType = new GraphQLObjectType({
         storyId: {
             type: new GraphQLNonNull(GraphQLInt),
         },        
-        userid: {
-            type: new GraphQLNonNull(GraphQLInt),    
-        },
-        date: {
-            type: GraphQLString,
+        users: {
+            type: UserSmallType,
+            resolve: resolver(models.comments.Users)
         },
         comment: {
             type: GraphQLString,
@@ -125,6 +123,7 @@ const UserType = new GraphQLObjectType({
 
 module.exports = {
     UserType,
+    UserSmallType,
     StoriesType,
     StoryFragmentsType,
     CommentsType

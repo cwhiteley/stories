@@ -1,6 +1,6 @@
-const { UserQuery, UsersQuery, StoriesQuery, StoryFragmentsQuery } = require('./query');
+const { UserQuery, UsersQuery, StoriesQuery, StoryFragmentsQuery, CommentsQuery } = require('./query');
 const { GraphQLObjectType, GraphQLSchema } = require('graphql');
-const { UpdateUserDesc, AddStoryFragment, UpdateStoryLikes, UpdateStoryFragmentViews } = require('./mutation');
+const { UpdateUserDesc, AddStoryFragment, UpdateStoryLikes, UpdateStoryFragmentViews, UpdateStoryComments } = require('./mutation');
 
 module.exports = new GraphQLSchema({
     query: new GraphQLObjectType({
@@ -10,7 +10,8 @@ module.exports = new GraphQLSchema({
             user: UserQuery,
             users: UsersQuery,
             stories: StoriesQuery,
-            storyfragments: StoryFragmentsQuery
+            storyfragments: StoryFragmentsQuery,
+            comments: CommentsQuery
         }
     }),
     mutation: new GraphQLObjectType({
@@ -20,7 +21,8 @@ module.exports = new GraphQLSchema({
             updateUserDesc: UpdateUserDesc,
             addStoryFragment: AddStoryFragment,
             updateStoryLikes: UpdateStoryLikes,
-            updateStoryFragmentViews: UpdateStoryFragmentViews 
+            updateStoryFragmentViews: UpdateStoryFragmentViews,
+            updateStoryComments: UpdateStoryComments
         }
     })    
 })

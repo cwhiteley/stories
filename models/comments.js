@@ -5,15 +5,12 @@ module.exports = function (sequelize, DataTypes) {
             autoIncrement: true,
             primaryKey: true
         },
-        userid: {
-            type: DataTypes.INTEGER
-        },
-        date: DataTypes.DATE,
         comment: DataTypes.TEXT
     }, {
         classMethods: {
             associate: function (models) {
                 Comments.Stories = Comments.belongsTo(models.stories);
+                Comments.Users = Comments.belongsTo(models.users);
             }
         }
     });
