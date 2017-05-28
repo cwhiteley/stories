@@ -44,8 +44,6 @@ module.exports = db;
 
 function createUsers() {
   const today = new Date();
-  today.setHours(0,0,0,0);
-  const todayVal = today.valueOf();
   sequelize.models.users.bulkCreate([{
     name: 'David',
     username: 'david001',
@@ -69,25 +67,24 @@ function createUsers() {
     return sequelize.models.users.findAll();
   }).then((users) => {
     return sequelize.models.stories.bulkCreate([{
-      date: todayVal,
+      date: today,
       userId: users[0].id,
       likedby: [2]
     },{
-      date: todayVal,
-      userId: users[1].id,
-      likedby: [2]
+      date: today,
+      userId: users[1].id
     },{
-      date: todayVal,
+      date: today,
       userId: users[2].id,
       likedby: [1,2]
     }]).then((story)=> { 
       return sequelize.models.storyfragments.bulkCreate([{
-            date: todayVal,
+            date: today,
             storyId: 1,
             url: 'http://www.google.com/',
             viewedby: [1,2]
           },{
-            date: todayVal,
+            date: today,
             storyId: 1,
             url: 'http://www.google.com/',
             viewedby: [1,2]

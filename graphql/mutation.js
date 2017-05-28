@@ -3,7 +3,7 @@ const { UserType, StoriesType, StoryFragmentsType, CommentsType } = require('./t
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList, GraphQLSchema } = require('graphql');
 
 //registration happens outside of grahql
-
+//add + update story/stories
 //add story [press upload add to stories for current story, story is based on ]
 //pass todays date, check if there is story for this date? return story id
 //other wise create a story and return the id
@@ -11,17 +11,18 @@ const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLLis
 
 //do customh join to show whos viewed and liked
 
-//add stories
-//update story - likes
+
+
+//update story - likes - x
 //update story - comments
-//update stories - viewed
+//update storyfragment - viewed
 //update users, follow
 //update users - desc?
 
-const UserMutation = {
+const UpdateUserDesc = {
     type: UserType,
     description: 'Update user description',
-    name: 'UserMutation',
+    name: 'UpdateUserDesc',
     args: {
         id: {
             description: 'ID of the user',
@@ -52,7 +53,7 @@ const AddStoryFragment =  {
     description: 'Add a story fragment',
     name: 'AddStoryFragment',
     args: {
-        userid: {
+        userId: {
             description: 'ID of the user',
             type: new GraphQLNonNull(GraphQLInt)
         },
@@ -65,11 +66,11 @@ const AddStoryFragment =  {
             type: GraphQLString
         }
     },
-    resolve: function(root, {userid, date, url}) {
+    resolve: function(root, {userId, date, url}) {
         const getStoryId = models.stories
-        .findOrCreate({where: {userId: userid, date: date}})
-        .spread((user, created) => {
-            return user.get({
+        .findOrCreate({where: {userId: userId, date: date}})
+        .spread((story, created) => {
+            return story.get({
                 plain: true
             }).id;
         });
@@ -88,10 +89,127 @@ const AddStoryFragment =  {
         });
     }
 };
+
+const UpdateStoryLikes = {
+    type: StoriesType,
+    description: 'Update likes for a story',
+    name: 'UpdateStoryLikes',
+    args: {
+        storyId: {
+            description: 'ID of the story',
+            type: new GraphQLNonNull(GraphQLInt)
+        },
+        likedBy: {
+            description: 'ID of the user thats liking',
+            type: new GraphQLNonNull(GraphQLInt)
+        }
+    },
+    resolve: function(root, {storyId, likedBy}) {
+        let storyCache;
+        const alreadyLikedArray = models.stories
+        .findById(storyId)
+        .then((story) => {
+            storyCache = story;
+            return story.get({
+                plain: true
+            }).likedby;
+        });
+
+        return alreadyLikedArray.then((likedArray) => {
+            if (likedArray.indexOf(likedBy) === -1) {
+                likedArray.push(likedBy);
+                return models.stories
+                .update({
+                    likedby: likedArray
+                }, {
+                    where: {
+                        id: storyId
+                    },
+                    returning: true,
+                    raw: true,
+                }).then((result) => {
+                    /* could use sequilize resolver here to return a join query, but not sure if its needed yet ? */
+                    return result[1][0];
+                });
+            } else {
+                return storyCache;
+            }
+        })
+    }
+};
+
+
+const UpdateStoryFragmentViews = {
+    type: StoryFragmentsType,
+    description: 'Update views for a storyfragment',
+    name: 'UpdateStoryFragmentViews',
+    args: {
+        storyFragId: {
+            description: 'ID of the storyfragment',
+            type: new GraphQLNonNull(GraphQLInt)
+        },
+        viewedBy: {
+            description: 'ID of the user thats viewed',
+            type: new GraphQLNonNull(GraphQLInt)
+        }
+    },
+    resolve: function(root, {storyFragId, viewedBy}) {
+        let storyFragCache;
+        const alreadyViewedArray = models.storyfragments
+        .findById(storyFragId)
+        .then((storyFrag) => {
+            storyFragCache = storyFrag;
+            return storyFrag.get({
+                plain: true
+            }).viewedby;
+        });
+
+        return alreadyViewedArray.then((viewedArray) => {
+            if (viewedArray.indexOf(viewedBy) === -1) {
+                viewedArray.push(viewedBy);
+                return models.storyfragments
+                .update({
+                    viewedby: viewedArray
+                }, {
+                    where: {
+                        id: storyFragId
+                    },
+                    returning: true,
+                    raw: true,
+                }).then((result) => {
+                    /* could use sequilize resolver here to return a join query, but not sure if its needed yet ? */
+                    return result[1][0];
+                });
+            } else {
+                return storyFragCache;
+            }
+        })
+    }
+};
  
 
 module.exports = {
-    UserMutation,
-    AddStoryFragment
+    UpdateUserDesc,
+    AddStoryFragment,
+    UpdateStoryLikes,
+    UpdateStoryFragmentViews
 };
 
+/*
+mutation {
+    addStoryFragment(userId: 1, date:"2017-05-28", url:"new.jpg") {
+		id,
+    viewedby
+    }
+  }
+
+
+query {
+  stories(userId: 1) {
+    id,
+    storyfragments {
+      date,
+      url
+    }
+  } 
+}*/
