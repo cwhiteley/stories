@@ -5,7 +5,7 @@ const { GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
 module.exports = {
     type: CommentsType,
     description: 'Update story comments',
-    name: 'UpdateStoryComments',
+    name: 'commentAdd',
     args: {
         storyId: {
             description: 'ID of the story',

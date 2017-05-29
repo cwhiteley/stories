@@ -6,7 +6,7 @@ const { GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
 module.exports = {
     type: StoryFragmentsType,
     description: 'Add a story fragment',
-    name: 'AddStoryFragment',
+    name: 'storyFragmentAdd',
     args: {
         userId: {
             description: 'ID of the user',

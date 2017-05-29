@@ -5,7 +5,7 @@ const { GraphQLNonNull, GraphQLInt } = require('graphql');
 module.exports = {
     type: StoryFragmentsType,
     description: 'Update views for a storyfragment',
-    name: 'UpdateStoryFragmentViews',
+    name: 'storyFragmentView',
     args: {
         storyFragId: {
             description: 'ID of the storyfragment',

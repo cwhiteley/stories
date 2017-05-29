@@ -11,11 +11,11 @@ module.exports = function (sequelize, DataTypes) {
         description: DataTypes.STRING,
         followers: {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
-            allowNull: true
+            defaultValue: []
         },
         following: {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
-            allowNull: true
+            defaultValue: []
         }        
     }, {
         classMethods: {

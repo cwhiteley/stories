@@ -5,7 +5,7 @@ const { resolver } = require('graphql-sequelize');
 
 module.exports = {
     type: new GraphQLList(CommentsType),
-    name: 'CommentsType',
+    name: 'comments',
     args: {
         storyId: {
             description: 'ID of the story',

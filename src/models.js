@@ -48,21 +48,17 @@ function createUsers() {
     name: 'David',
     username: 'david001',
     facebookID: '001',
-    description: 'robot model #1',
-    followers: [2]
+    description: 'robot model #1'
   }, {
     name: 'Walter',
     username: 'walter001',
     facebookID: '002',
-    description: 'robot model #2',
-    followers: [1]
+    description: 'robot model #2'
   }, {
     name: 'Elizabeth',
     username: 'liz',
     facebookID: '003',
-    description: 'shes real',
-    followers: [1,2],
-    following: [1,2]
+    description: 'shes real'
   }]).then(() => {
     return sequelize.models.users.findAll();
   }).then((users) => {

@@ -5,7 +5,7 @@ const { resolver } = require('graphql-sequelize');
 
 module.exports = {
     type: new GraphQLList(StoryFragmentsType),
-    name: 'StoryFragments',
+    name: 'storyFragments',
     args: {
         storyId: {
             description: 'ID of the story',

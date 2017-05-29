@@ -5,9 +5,9 @@ const { resolver } = require('graphql-sequelize');
 
 module.exports = {
     type: new GraphQLList(UserType),
-    name: 'Users',
+    name: 'users',
     args: {
-        id: {
+        userIds: {
             description: 'ID of the user',
             type: new GraphQLList(GraphQLInt)
         }

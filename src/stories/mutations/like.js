@@ -4,8 +4,8 @@ const { GraphQLNonNull, GraphQLInt } = require('graphql');
 
 module.exports = {
     type: StoriesType,
-    description: 'Update likes for a story',
-    name: 'UpdateStoryLikes',
+    description: 'storyLike',
+    name: 'storyLike',
     args: {
         storyId: {
             description: 'ID of the story',

@@ -5,9 +5,9 @@ const { GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
 module.exports = {
     type: UserType,
     description: 'Update user description',
-    name: 'UpdateUserDesc',
+    name: 'userUpdateDesc',
     args: {
-        id: {
+        userId: {
             description: 'ID of the user',
             type: new GraphQLNonNull(GraphQLInt)
         },
@@ -16,12 +16,12 @@ module.exports = {
             type: GraphQLString
         }
     },
-    resolve: function(root, {id, desc}) {
+    resolve: function(root, {userId, desc}) {
         return models.users.update({
             description: desc
         }, {
             where: {
-                id: id
+                id: userId
             },
              returning: true,
              raw: true,
