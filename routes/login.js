@@ -1,7 +1,7 @@
 var express = require('express');
 const jwt = require('jsonwebtoken');
 var router = express.Router();
-const { sequelize: { models } } = require('../models/index.js');
+const { sequelize: { models } } = require('../src/models.js');
 const  { jwt: {secret} } = require('../config');
    
 //shouldnt use facebook as param, just use what the facebook API returns 
