@@ -6,7 +6,7 @@ module.exports = function (sequelize, DataTypes) {
             primaryKey: true
         },
         date: DataTypes.DATEONLY,
-        likedby: {
+        likedBy: {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             defaultValue: []
         }

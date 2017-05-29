@@ -7,7 +7,7 @@ module.exports = function (sequelize, DataTypes) {
         },
         date: DataTypes.DATEONLY,
         url: DataTypes.STRING,
-        viewedby: {
+        viewedBy: {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             defaultValue: []
         }
