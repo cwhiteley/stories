@@ -24,7 +24,7 @@ module.exports = {
             storyFragCache = storyFrag;
             return storyFrag.get({
                 plain: true
-            }).viewedby;
+            }).viewedBy;
         });
 
         return alreadyViewedArray.then((viewedArray) => {
@@ -32,7 +32,7 @@ module.exports = {
                 viewedArray.push(viewedBy);
                 return models.storyfragments
                 .update({
-                    viewedby: viewedArray
+                    viewedBy: viewedArray
                 }, {
                     where: {
                         id: storyFragId

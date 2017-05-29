@@ -18,7 +18,7 @@ module.exports = new GraphQLObjectType({
         url: {
             type: GraphQLString,
         },
-        viewedby: {
+        viewedBy: {
             type: new GraphQLList(GraphQLInt),
         }
     }

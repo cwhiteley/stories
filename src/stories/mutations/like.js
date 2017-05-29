@@ -24,7 +24,7 @@ module.exports = {
             storyCache = story;
             return story.get({
                 plain: true
-            }).likedby;
+            }).likedBy;
         });
 
         return alreadyLikedArray.then((likedArray) => {
@@ -32,7 +32,7 @@ module.exports = {
                 likedArray.push(likedBy);
                 return models.stories
                 .update({
-                    likedby: likedArray
+                    likedBy: likedArray
                 }, {
                     where: {
                         id: storyId

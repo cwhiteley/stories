@@ -14,7 +14,7 @@ module.exports = new GraphQLObjectType({
         date: {
             type: GraphQLString,
         },
-        likedby: {
+        likedBy: {
             type: new GraphQLList(GraphQLInt)
         },
         userId: {
