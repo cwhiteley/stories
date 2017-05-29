@@ -17,7 +17,12 @@ module.exports = function (sequelize, DataTypes) {
                 Stories.StoryFragments = Stories.hasMany(models.storyfragments);
                 Stories.Comments = Stories.hasMany(models.comments);
             }
-        }
+        },
+        indexes: [
+            {
+                fields: ['userId']
+            }
+        ]
     });
 
     return Stories;

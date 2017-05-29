@@ -23,7 +23,13 @@ module.exports = function (sequelize, DataTypes) {
                 Users.Stories = Users.hasMany(models.stories);
                 Users.Comments = Users.hasMany(models.comments);
             }
-        }
+        },
+        indexes: [
+            {
+                unique: true,
+                fields: ['id'] //maybe facebookID is better?
+            }
+        ]        
     });
 
     return Users;

@@ -16,7 +16,12 @@ module.exports = function (sequelize, DataTypes) {
             associate: function (models) {
                 StoryFragments.Stories = StoryFragments.belongsTo(models.stories);
             }
-        }
+        },
+        indexes: [
+            {
+                fields: ['storyId']
+            }
+        ]        
     });
 
     return StoryFragments;

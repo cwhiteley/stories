@@ -12,7 +12,12 @@ module.exports = function (sequelize, DataTypes) {
                 Comments.Stories = Comments.belongsTo(models.stories);
                 Comments.Users = Comments.belongsTo(models.users);
             }
-        }
+        },
+        indexes: [
+            {
+                fields: ['storyId']
+            }
+        ]  
     });
 
     return Comments;
