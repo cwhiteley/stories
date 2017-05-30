@@ -30,7 +30,9 @@ module.exports = {
             return resultUser.get({
                 plain: true
             }).following;
-        });     
+        }).catch((err) => {
+            return [];
+        });    
 
         return alreadyFollowingArray.then((followingArray) => {
             if (followingArray.indexOf(followingId) > -1 && type === 'follow') {
@@ -55,7 +57,6 @@ module.exports = {
                     return result[1][0];
                 });
             });
-       
         });
 
 

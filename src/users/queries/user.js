@@ -7,7 +7,7 @@ module.exports = {
     type: UserType,
     name: 'user',
     args: {
-        userId: {
+        id: {
             description: 'ID of the user',
             type: new GraphQLNonNull(GraphQLInt)
         }

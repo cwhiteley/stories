@@ -7,7 +7,7 @@ module.exports = {
     type: new GraphQLList(UserType),
     name: 'users',
     args: {
-        userIds: {
+        ids: {
             description: 'ID of the user',
             type: new GraphQLList(GraphQLInt)
         }
