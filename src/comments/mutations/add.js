@@ -1,6 +1,6 @@
 const { sequelize: { models } } = require('../../models');
 const CommentsType = require('../type');
-const { GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
+const { GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLError } = require('graphql');
 
 module.exports = {
     type: CommentsType,
