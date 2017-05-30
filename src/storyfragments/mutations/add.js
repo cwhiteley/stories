@@ -1,6 +1,6 @@
 const { sequelize: { models } } = require('../../models');
 const StoryFragmentsType = require('../type');
-const { GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
+const { GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLError } = require('graphql');
 
 
 module.exports = {
@@ -28,6 +28,8 @@ module.exports = {
             return story.get({
                 plain: true
             }).id;
+        }).catch((err) => {
+            throw new GraphQLError('error find or creating parent story for storyfragment');
         });
 
         return getStoryId.then((storyId) => {
@@ -40,6 +42,8 @@ module.exports = {
                 return storyCreated.get({
                     plain: true
                 });
+            }).catch((err) => {
+                throw new GraphQLError('error creating story fragment');
             });
         });
     }

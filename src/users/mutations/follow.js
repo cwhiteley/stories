@@ -1,6 +1,6 @@
 const { sequelize: { models } } = require('../../models');
 const UserType = require('../type');
-const { GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
+const { GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLError } = require('graphql');
 
 module.exports = {
     type: UserType,
@@ -31,7 +31,7 @@ module.exports = {
                 plain: true
             }).following;
         }).catch((err) => {
-            return [];
+            throw new GraphQLError('user not found');
         });    
 
         return alreadyFollowingArray.then((followingArray) => {
@@ -56,6 +56,8 @@ module.exports = {
                 return updateFollowers().then(() => {
                     return result[1][0];
                 });
+            }).catch((err) => {
+                throw new GraphQLError('error updating follower/following array for user');
             });
         });
 

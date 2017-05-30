@@ -29,6 +29,8 @@ module.exports = {
           return result.get({
                 plain: true
             });
-        });
+        }).catch((err) => {
+            throw new GraphQLError('error creating comment');
+        });;
     }
 };

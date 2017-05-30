@@ -1,6 +1,6 @@
 const { sequelize: { models } } = require('../../models');
 const UserType = require('../type');
-const { GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
+const { GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLError } = require('graphql');
 
 module.exports = {
     type: UserType,
@@ -26,7 +26,12 @@ module.exports = {
              returning: true,
              raw: true,
         }).then((result) => {
+            if (!result[1].length) {
+                throw new GraphQLError('user not found');
+            }
             return result[1][0];
+        }).catch((err) => {
+            throw new GraphQLError('error updating user description');
         });
     }
 };
