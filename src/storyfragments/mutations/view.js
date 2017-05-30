@@ -26,7 +26,7 @@ module.exports = {
                 plain: true
             }).viewedBy;
         }).catch((err) => {
-           throw new GraphQLError('story fragment not found');
+           throw new GraphQLError(err.message || err.errors || 'story fragment not found');
         });
 
         return alreadyViewedArray.then((viewedArray) => {
@@ -45,7 +45,7 @@ module.exports = {
                     /* could use sequilize resolver here to return a join query, but not sure if its needed yet ? */
                     return result[1][0];
                 }).catch((err) => {
-                    throw new GraphQLError('error updating viewedBy for story fragment');
+                    throw new GraphQLError(err.message || err.errors ||'error updating viewedBy for story fragment');
                 });
             } else {
                 return storyFragCache;

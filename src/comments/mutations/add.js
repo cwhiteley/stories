@@ -30,7 +30,7 @@ module.exports = {
                 plain: true
             });
         }).catch((err) => {
-            throw new GraphQLError('error creating comment');
+            throw new GraphQLError(err.message || err.errors || 'error creating comment');
         });;
     }
 };

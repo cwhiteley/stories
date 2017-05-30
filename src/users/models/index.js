@@ -7,7 +7,10 @@ module.exports = function (sequelize, DataTypes) {
         },
         facebookID: DataTypes.STRING,
         name: DataTypes.STRING,
-        username: DataTypes.STRING,
+        username: {
+            type: DataTypes.STRING,
+            unique: true
+        },
         description: DataTypes.STRING,
         followers: {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
@@ -27,7 +30,7 @@ module.exports = function (sequelize, DataTypes) {
         indexes: [
             {
                 unique: true,
-                fields: ['id'] //maybe facebookID is better?
+                fields: ['id', 'username'] //maybe facebookID is better?
             }
         ]        
     });

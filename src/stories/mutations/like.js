@@ -26,7 +26,7 @@ module.exports = {
                 plain: true
             }).likedBy;
         }).catch((err) => {
-            throw new GraphQLError('error finding user');
+            throw new GraphQLError(err.message || err.errors || 'error finding user');
         });
 
         return alreadyLikedArray.then((likedArray) => {
@@ -45,7 +45,7 @@ module.exports = {
                     /* could use sequilize resolver here to return a join query, but not sure if its needed yet ? */
                     return result[1][0];
                 }).catch((err) => {
-                    throw new GraphQLError('error updating likedby array for story');
+                    throw new GraphQLError(err.message || err.errors || 'error updating likedby array for story');
                 });
             } else {
                 return storyCache;
