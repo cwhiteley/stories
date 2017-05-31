@@ -12,5 +12,4 @@ module.exports = {
             type: new GraphQLNonNull(GraphQLInt)
         }
     },
-    resolve: resolver(models.users)
-}
+    resolve: resolver(models.users)}

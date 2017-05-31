@@ -31,7 +31,7 @@ db.connect = function () {
         return sequelize.sync({
             force: true
         }).then(()=> {
-            createUsers();
+          //  createUsers();
         });
     });
 };

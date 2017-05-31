@@ -4,7 +4,9 @@
   "description": "stories server",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "dev": "supervisor -watch src,routes,bin node ./bin/www",
+    "start": "node ./bin/www",
+    "test": "node_modules/.bin/mocha src/users/models/test.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +33,9 @@
     "pg": "^6.1.5",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.30.4"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "mocha": "^3.4.2"
   }
 }
