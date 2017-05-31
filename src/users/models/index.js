@@ -9,7 +9,10 @@ module.exports = function (sequelize, DataTypes) {
         name: DataTypes.STRING,
         username: {
             type: DataTypes.STRING,
-            unique: true
+            unique: true,
+            validate: {
+                isAlphanumeric: true
+            }
         },
         description: DataTypes.STRING,
         followers: {

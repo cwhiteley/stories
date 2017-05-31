@@ -57,7 +57,7 @@ module.exports = {
                     return result[1][0];
                 });
             }).catch((err) => {
-                throw new GraphQLError(err.message || err.errors || 'error updating follower/following array for user');
+                throw new GraphQLError(err.errors[0].message || err.message || 'error updating follower/following array for user');
             });
         });
 

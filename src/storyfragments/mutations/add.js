@@ -29,7 +29,7 @@ module.exports = {
                 plain: true
             }).id;
         }).catch((err) => {
-            throw new GraphQLError(err.message || err.errors || 'error find or creating parent story for storyfragment');
+            throw new GraphQLError(err.errors[0].message || err.message || 'error find or creating parent story for storyfragment');
         });
 
         return getStoryId.then((storyId) => {
@@ -43,7 +43,7 @@ module.exports = {
                     plain: true
                 });
             }).catch((err) => {
-                throw new GraphQLError(err.message || err.errors || 'error creating story fragment');
+                throw new GraphQLError(err.errors[0].message || err.message || 'error creating story fragment');
             });
         });
     }

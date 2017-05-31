@@ -6,7 +6,7 @@ const stories = require('./stories/queries/stories');
 const storyfragments = require('./storyfragments/queries/storyfragments');
 const comments = require('./comments/queries/comments');
 
-const userUpdateDesc = require('./users/mutations/updateDesc');
+const userUpdateDetails = require('./users/mutations/updateDetails');
 const userFollow = require('./users/mutations/follow');
 const storyFragmentAdd = require('./storyfragments/mutations/add');
 const storyFragmentView = require('./storyfragments/mutations/view');
@@ -27,7 +27,7 @@ module.exports = new GraphQLSchema({
     mutation: new GraphQLObjectType({
         name: 'MutationSchema',
         fields: {
-            userUpdateDesc,
+            userUpdateDetails,
             userFollow,
             storyFragmentAdd,
             storyFragmentView,
