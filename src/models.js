@@ -1,7 +1,7 @@
 const path = require('path');
 const Sequelize = require('sequelize');
 const config = require('../config');
-const {database: { dbname, username, password, host}} = config;
+const { database: { dbname, username, password, host} } = config;
 const sequelize = new Sequelize(dbname, username, password, {
   host: host,
   dialect: 'postgres',
@@ -31,7 +31,7 @@ db.connect = function () {
         return sequelize.sync({
             force: true
         }).then(()=> {
-          //  createUsers();
+            createUsers();
         });
     });
 };
