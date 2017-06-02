@@ -2,7 +2,7 @@ const request = require('supertest');
 const path = require('path');
 const assert = require('assert');
 var db = require('../src/models');
-let app, server;
+let app, server, token;
 
 describe('Integration Tests', function() {
 
@@ -20,10 +20,22 @@ describe('Integration Tests', function() {
         done();
     });
 
+    describe('Login', function () {
+        it('should generate a JWT token', function(done) {
+            server
+            .get('/login')
+            .then(res => {
+                token = res.body.token;
+                assert.notEqual(token, null);
+                done();
+            });
+        });
+    });
+
     describe('Adding user', function() {
         it('should send a 200', function(done) {
             server
-                .post('/graphql?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNDk1NDYzMzk5fQ.BmjXjh3aNhhuW1n5qVOafK2FKHW6pablqYE3rsG-8uA')
+                .post('/graphql?token=' + token)
                 .send({"query": "query {user(id: 1) {facebookID,username,name,description}}"})
                 .expect(200)
                 .then(res => {
