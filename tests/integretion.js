@@ -1,4 +1,5 @@
 const request = require('supertest');
+var proxyquire =  require('proxyquire');
 const path = require('path');
 const assert = require('assert');
 var db = require('../src/models');
@@ -7,11 +8,27 @@ let app, server, token;
 describe('Integration Tests', function() {
 
     before(function(done) {
+        const facebookStub = {
+            init: function () {
+                return {
+                    name: 'Rippley',
+                    username: 'ripley005',
+                    facebookID: '001',
+                    description: 'robot model #5'
+                }
+            }
+        };
+
+
+        proxyquire(path.join(__dirname, '../', 'routes', 'login.js'), {
+            '../src/utils/facebook': facebookStub
+        });
+
         db.connect().then(()=> { 
             done();
         }).catch((e) => {
             done();
-        })
+        });
     });
 
     beforeEach(function(done) {
@@ -32,20 +49,17 @@ describe('Integration Tests', function() {
         });
     });
 
-    describe('Adding user', function() {
-        it('should send a 200', function(done) {
+    describe('Users', function() {
+        it('should return a user', function(done) {
             server
                 .post('/graphql?token=' + token)
                 .send({"query": "query {user(id: 1) {facebookID,username,name,description}}"})
                 .expect(200)
-                .then(res => {
-                    console.log(res.body);
-                    assert(res.body.data.user.name, 'David')
+                .end((err, res) => {
+                    assert.equal(res.body.data.user.name, 'Rippley')
                     done();
                 })
         });
 
     });
 });
-
-//{"query": "query {user(id: 1) {username,name,story {id date storyfragments {url}}}}"}

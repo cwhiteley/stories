@@ -2,13 +2,8 @@ var express = require('express');
 const jwt = require('jsonwebtoken');
 var router = express.Router();
 const { sequelize: { models } } = require('../src/models.js');
-const  { jwt: {secret} } = require('../config');
-   
-//shouldnt use facebook as param, just use what the facebook API returns 
-function facebookGraphCall() {
-    //use auth token to get facebookID
-    return '001';
-}
+const  { jwt: {secret} } = require('../src/utils/config');
+const facebook = require('../src/utils/facebook');
 
 function createJWToken(res, id) {
     const user = {
@@ -21,39 +16,21 @@ function createJWToken(res, id) {
 }
 
 router.get('/', function (req, res, next) {
-    const facebookID = facebookGraphCall();
-    models.users.find({
-        where: {
-            facebookID: facebookID
-        },
-        raw: true
-    }).then((result) => { 
-        if (result) {
-            return createJWToken(res, result.id);
-        }
-        return models.users.create({
-            name: 'Rippley',
-            username: 'ripley005',
-            facebookID: facebookID,
-            description: 'robot model #5',
-            followers: [1, 2, 3]
-        }).then((newUser) => {
-            const newUserId = newUser.get({plain: true}).id;
-            return createJWToken(res, newUserId);
-        }).catch((err) => {
-            return next({
-                msg: `unable to create user with facebookID ${facebookID}`,
-                statusCode: 500,
-                err
-            });            
-        });
+    const facebookUser = facebook.init();
+    models.users
+    .findOrCreate({where: {facebookID: facebookUser.facebookID}, defaults: facebookUser})
+    .spread((newUser, created) => {
+         const newUserId = newUser.get({
+            plain: true
+        }).id;
+        return createJWToken(res, newUserId);
     }).catch((err) => {
         return next({
-            msg: `unable to query user with id ${facebookID}`,
+            msg: `unable to find or create user with facebookID ${facebookID}`,
             statusCode: 500,
             err
         });
-    });
+    });    
 });
 
 module.exports = router;
