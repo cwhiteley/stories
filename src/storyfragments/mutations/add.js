@@ -29,7 +29,7 @@ module.exports = {
                 plain: true
             }).id;
         }).catch((err) => {
-            throw new GraphQLError(err.errors[0].message || err.message || 'error find or creating parent story for storyfragment');
+            throw new GraphQLError(err.message || 'error find or creating parent story for storyfragment');
         });
 
         return getStoryId.then((storyId) => {
