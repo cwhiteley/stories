@@ -7,7 +7,7 @@ let app, server, token;
 
 describe('Integration Tests', function() {
 
-    before(function(done) {
+    beforeEach(function(done) {
         const facebookStub = {
             init: function () {
                 return {
@@ -24,17 +24,42 @@ describe('Integration Tests', function() {
             '../src/utils/facebook': facebookStub
         });
 
-        db.connect().then(()=> { 
-            done();
+        db.connect({force: true}).then(()=> {
+            return populate().then(()=> {
+                return connectServer().then(() => {
+                    done();
+                });
+            });
         }).catch((e) => {
+            console.log('Error connecting to DB/populating ', e);
             done();
         });
-    });
 
-    beforeEach(function(done) {
-        app = require(path.join(__dirname, '../', 'server.js'));
-        server = request(app);
-        done();
+        function populate() {
+            return db.sequelize.models.users.bulkCreate([{
+                name: 'David',
+                username: 'david001',
+                facebookID: '001',
+                description: 'robot model #1'
+            }, {
+                name: 'Walter',
+                username: 'walter001',
+                facebookID: '002',
+                description: 'robot model #2'
+            }, {
+                name: 'Elizabeth',
+                username: 'liz',
+                facebookID: '003',
+                description: 'shes real'
+            }])     
+        }
+
+        function connectServer() {
+            app = require(path.join(__dirname, '../', 'server.js'));
+            server = request(app);
+            return Promise.resolve();
+        }
+
     });
 
     describe('Login', function () {
@@ -50,36 +75,16 @@ describe('Integration Tests', function() {
     });
 
     describe('Users', function() {
-        
-        before(function() {
-            db.sequelize.models.users.bulkCreate([{
-                name: 'David',
-                username: 'david001',
-                facebookID: '001',
-                description: 'robot model #1'
-            }, {
-                name: 'Walter',
-                username: 'walter001',
-                facebookID: '002',
-                description: 'robot model #2'
-            }, {
-                name: 'Elizabeth',
-                username: 'liz',
-                facebookID: '003',
-                description: 'shes real'
-            }]);
-        });
-        
         it('Query: should return a user', function(done) {
             server
                 .post('/graphql?token=' + token)
                 .send({'query': 'query {user(id: 1) {facebookID,username,name,description}}'})
                 .expect(200)
                 .end((err, res) => {
-                    assert.equal(res.body.data.user.name, 'Rippley');
-                    assert.equal(res.body.data.user.username, 'ripley005');
-                    assert.equal(res.body.data.user.facebookID, '000');
-                    assert.equal(res.body.data.user.description, 'robot model #5');
+                    assert.equal(res.body.data.user.name, 'David');
+                    assert.equal(res.body.data.user.username, 'david001');
+                    assert.equal(res.body.data.user.facebookID, '001');
+                    assert.equal(res.body.data.user.description, 'robot model #1');
                     done();
                 })
         });
@@ -90,13 +95,25 @@ describe('Integration Tests', function() {
                 .send({'query': 'mutation {userUpdateDetails(userId: 1, name:"FakeRipley", desc:"whatever", username:"ripleyclone22") {facebookID,username,name,description}}'})
                 .expect(200)
                 .end((err, res) => {
-
                     assert.equal(res.body.data.userUpdateDetails.name, 'FakeRipley');
                     assert.equal(res.body.data.userUpdateDetails.username, 'ripleyclone22');
                     assert.equal(res.body.data.userUpdateDetails.description, 'whatever');
                     done();
                 })            
         });
+
+        it('Mutation: should let you follow a user', function(done) {
+            server
+                .post('/graphql?token=' + token)
+                .send({'query': 'mutation {userFollow(userId: 1, followingId:2, type:"follow") {facebookID,username,name,description,followers,following}}'})
+                .expect(200)
+                .end((err, res) => {
+                    assert.equal(res.body.data.userFollow.name, 'David');
+                    assert.deepEqual(res.body.data.userFollow.followers, []);
+                    assert.deepEqual(res.body.data.userFollow.following, [2]);
+                    done();
+                })            
+        });        
 
     });
 });

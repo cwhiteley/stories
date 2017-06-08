@@ -26,10 +26,10 @@ Object.keys(db).forEach(modelName => {
     }
 });
 
-db.connect = function () {
+db.connect = function (param) {
     return sequelize.authenticate().then(()=> {
         return sequelize.sync({
-            force: true
+            force: param.force
         });
     });
 };

@@ -12,7 +12,7 @@ module.exports = {
             type: new GraphQLNonNull(GraphQLInt)
         },
         followingId: {
-            description: 'Text for the description',
+            description: 'ID of the user being followed',
             type: new GraphQLNonNull(GraphQLInt)
         },
         type: {
