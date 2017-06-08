@@ -74,6 +74,38 @@ describe.only('Integration Tests', function() {
     });
 
     describe('StoryFragment', function() {
+        it('Query: should return story fragments', function(done) {
+            let result = [];
+            const postQuery = '/graphql?token=' + token;
+            const storyFragmentAddMutation = {'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {storyId, url}}'};
+            server
+                .post(postQuery)
+                .send(storyFragmentAddMutation)
+                .end((err, res) => {
+                    result.push({
+                        storyId: res.body.data.storyFragmentAdd.storyId,
+                        url: res.body.data.storyFragmentAdd.url
+                    });
+                    server
+                        .post(postQuery)
+                        .send(storyFragmentAddMutation)
+                        .end((err, res) => {
+                            result.push({
+                                storyId: res.body.data.storyFragmentAdd.storyId,
+                                url: res.body.data.storyFragmentAdd.url
+                            });                        
+                        server
+                        .post(postQuery)
+                        .send({'query': 'query {storyfragments(storyId: 1) {storyId,url}}'})
+                        .end((err, res) => {
+                            assert.deepEqual(res.body.data.storyfragments, result);
+                            done();
+                        });
+                    });
+                });
+        });
+
+
         it('Mutation: should add a new story fragment', function(done) {
             let createdStoryId;
             server
