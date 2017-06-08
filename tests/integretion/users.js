@@ -2,7 +2,7 @@ const request = require('supertest');
 var proxyquire =  require('proxyquire');
 const path = require('path');
 const assert = require('assert');
-var db = require('../src/models');
+var db = require('../../src/models');
 let app, server, token;
 
 describe('Integration Tests', function() {
@@ -20,7 +20,7 @@ describe('Integration Tests', function() {
         };
 
 
-        proxyquire(path.join(__dirname, '../', 'routes', 'login.js'), {
+        proxyquire(path.join(__dirname, '../', '../', 'routes', 'login.js'), {
             '../src/utils/facebook': facebookStub
         });
 
@@ -55,7 +55,7 @@ describe('Integration Tests', function() {
         }
 
         function connectServer() {
-            app = require(path.join(__dirname, '../', 'server.js'));
+            app = require(path.join(__dirname, '../', '../', 'server.js'));
             server = request(app);
             return Promise.resolve();
         }
@@ -144,10 +144,9 @@ describe('Integration Tests', function() {
                             assert.deepEqual(res.body.data.user.followers, []);
                             done();
                         });
-                }                  
+                }
+        });
 
-                
-        });           
 
     });
 });

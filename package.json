@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "supervisor -watch src,routes,bin node ./bin/www",
     "start": "node ./bin/www",
-    "test": "NODE_ENV=test node_modules/.bin/mocha tests/integretion.js"
+    "test": "NODE_ENV=test node_modules/.bin/mocha tests/integretion/*.js"
   },
   "repository": {
     "type": "git",
