@@ -28,17 +28,17 @@ describe('Integration Tests', function() {
 
     describe('Stories', function() {
         it('Query: should return stories', function(done) {
+            server
+                .post('/graphql?token=' + token)
+                .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {url}}'})
+                .end((err, res) => {
                     server
-                        .post('/graphql?token=' + token)
-                        .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {url}}'})
-                        .end((err, res) => {
-                            server
-                            .post('/graphql?token=' + token)
-                            .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Fri Jun 09 2017", url:"some2.jpg") {url}}'})
-                            .end((err, res) => {
-                                checkStories()
-                            })
-                        });
+                    .post('/graphql?token=' + token)
+                    .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Fri Jun 09 2017", url:"some2.jpg") {url}}'})
+                    .end((err, res) => {
+                        checkStories()
+                    })
+                });
 
             function checkStories() {
                 server
@@ -57,13 +57,13 @@ describe('Integration Tests', function() {
 
         it('Mutation: should let you like/unlike a story', function(done) {
             let storyId;
-                    server
-                        .post('/graphql?token=' + token)
-                        .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {storyId,url}}'})
-                        .end((err, res) => {
-                            storyId = res.body.data.storyFragmentAdd.storyId;
-                             checkStories();
-                        });
+            server
+                .post('/graphql?token=' + token)
+                .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {storyId,url}}'})
+                .end((err, res) => {
+                    storyId = res.body.data.storyFragmentAdd.storyId;
+                        checkStories();
+                });
     
             function checkStories() {
                 server
