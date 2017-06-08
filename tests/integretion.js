@@ -102,18 +102,52 @@ describe('Integration Tests', function() {
                 })            
         });
 
-        it('Mutation: should let you follow a user', function(done) {
+
+        it('Mutation: should let you follow/unfollow a user', function(done) {
             server
                 .post('/graphql?token=' + token)
-                .send({'query': 'mutation {userFollow(userId: 1, followingId:2, type:"follow") {facebookID,username,name,description,followers,following}}'})
+                .send({'query': 'mutation {userFollow(userId: 3, followingId:1, type:"follow") {following}}'})
                 .expect(200)
                 .end((err, res) => {
-                    assert.equal(res.body.data.userFollow.name, 'David');
-                    assert.deepEqual(res.body.data.userFollow.followers, []);
-                    assert.deepEqual(res.body.data.userFollow.following, [2]);
-                    done();
-                })            
-        });        
+                    assert.deepEqual(res.body.data.userFollow.following, [1]);
+                    checkUserThatisFollowed(done)
+                });
+
+                function checkUserThatisFollowed(done) {
+                    server
+                        .post('/graphql?token=' + token)
+                        .send({'query': 'query {user(id: 1) {followers}}'})
+                        .expect(200)
+                        .end((err, res) => {
+                            assert.deepEqual(res.body.data.user.followers, [3]);
+                            unFollow(done)
+                        });
+                }                
+
+                function unFollow(done) {
+                    server
+                        .post('/graphql?token=' + token)
+                        .send({'query': 'mutation {userFollow(userId: 3, followingId:1, type:"unfollow") {following}}'})
+                        .expect(200)
+                        .end((err, res) => {
+                            assert.deepEqual(res.body.data.userFollow.following, []);
+                            checkUserThatisUnFollowed(done);
+                        });
+                }
+
+                function checkUserThatisUnFollowed(done) {
+                    server
+                        .post('/graphql?token=' + token)
+                        .send({'query': 'query {user(id: 1) {followers}}'})
+                        .expect(200)
+                        .end((err, res) => {
+                            assert.deepEqual(res.body.data.user.followers, []);
+                            done();
+                        });
+                }                  
+
+                
+        });           
 
     });
 });
