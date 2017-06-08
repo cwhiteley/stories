@@ -5,7 +5,7 @@ const assert = require('assert');
 var db = require('../../src/models');
 let app, server, token;
 
-describe.only('Integration Tests', function() {
+describe('Integration Tests', function() {
     beforeEach(function(done) {
         const facebookStub = {
             init: function () {
@@ -82,21 +82,18 @@ describe.only('Integration Tests', function() {
                 .post(postQuery)
                 .send(storyFragmentAddMutation)
                 .end((err, res) => {
-                    result.push({
-                        storyId: res.body.data.storyFragmentAdd.storyId,
-                        url: res.body.data.storyFragmentAdd.url
-                    });
+                    const {url, storyId} = res.body.data.storyFragmentAdd;
+                    result.push({storyId, url});
                     server
                         .post(postQuery)
                         .send(storyFragmentAddMutation)
                         .end((err, res) => {
-                            result.push({
-                                storyId: res.body.data.storyFragmentAdd.storyId,
-                                url: res.body.data.storyFragmentAdd.url
-                            });                        
+                            const {url, storyId} = res.body.data.storyFragmentAdd;
+                            result.push({storyId,url});                        
                         server
                         .post(postQuery)
                         .send({'query': 'query {storyfragments(storyId: 1) {storyId,url}}'})
+                        .expect(200)
                         .end((err, res) => {
                             assert.deepEqual(res.body.data.storyfragments, result);
                             done();
@@ -105,7 +102,6 @@ describe.only('Integration Tests', function() {
                 });
         });
 
-
         it('Mutation: should add a new story fragment', function(done) {
             let createdStoryId;
             server
@@ -113,8 +109,9 @@ describe.only('Integration Tests', function() {
                 .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {storyId,url}}'})
                 .expect(200)
                 .end((err, res) => {
-                    assert.equal(res.body.data.storyFragmentAdd.url, 'some.jpg');
-                    createdStoryId = res.body.data.storyFragmentAdd.storyId;
+                    const {url, storyId} = res.body.data.storyFragmentAdd;
+                    assert.equal(url, 'some.jpg');
+                    createdStoryId = storyId;
                     shouldAddFragmentoSameStory(done);
                 });
 
@@ -124,12 +121,46 @@ describe.only('Integration Tests', function() {
                         .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some2.jpg") {storyId,url}}'})
                         .expect(200)
                         .end((err, res) => {
-                            assert.equal(res.body.data.storyFragmentAdd.url, 'some2.jpg');
-                            assert.equal(res.body.data.storyFragmentAdd.storyId, createdStoryId);
+                            const {url, storyId} = res.body.data.storyFragmentAdd;
+                            assert.equal(url, 'some2.jpg');
+                            assert.equal(storyId, createdStoryId);
                             done();
                         });
                 }
         });
+
+        it('Mutation: view a story fragment', function (done) {
+            let storyFragId;
+            server
+                .post('/graphql?token=' + token)
+                .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {id, storyId,url}}'})
+                .expect(200)
+                .end((err, res) => {
+                    const {url, id} = res.body.data.storyFragmentAdd;
+                    assert.equal(url, 'some.jpg');
+                    storyFragId = id;
+                    viewStoryFragment(done);
+
+                    function viewStoryFragment(done) {
+                        server
+                            .post('/graphql?token=' + token)
+                            .send({'query': `mutation {storyFragmentView(storyFragId: ${storyFragId}, viewedBy:3) {storyId,url,viewedBy}}`})
+                            .end((err, res) => {
+                                server
+                                    .post('/graphql?token=' + token)
+                                    .send({'query': 'mutation {storyFragmentView(storyFragId: 1, viewedBy:2) {storyId,url,viewedBy}}'})
+                                    .expect(200)
+                                    .end((err, res) => {
+                                        const {url, viewedBy} = res.body.data.storyFragmentView;
+                                        assert.equal(url, 'some.jpg');
+                                        assert.deepEqual(viewedBy, [3, 2]);
+                                        done();
+                                    });
+                            });
+                    }
+                });
+        });
+
 
     });
 });

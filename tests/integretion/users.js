@@ -81,10 +81,11 @@ describe('Integration Tests', function() {
                 .send({'query': 'query {user(id: 1) {facebookID,username,name,description}}'})
                 .expect(200)
                 .end((err, res) => {
-                    assert.equal(res.body.data.user.name, 'David');
-                    assert.equal(res.body.data.user.username, 'david001');
-                    assert.equal(res.body.data.user.facebookID, '001');
-                    assert.equal(res.body.data.user.description, 'robot model #1');
+                    const {name, username, facebookID, description} = res.body.data.user;
+                    assert.equal(name, 'David');
+                    assert.equal(username, 'david001');
+                    assert.equal(facebookID, '001');
+                    assert.equal(description, 'robot model #1');
                     done();
                 })
         });
@@ -95,9 +96,10 @@ describe('Integration Tests', function() {
                 .send({'query': 'mutation {userUpdateDetails(userId: 1, name:"FakeRipley", desc:"whatever", username:"ripleyclone22") {facebookID,username,name,description}}'})
                 .expect(200)
                 .end((err, res) => {
-                    assert.equal(res.body.data.userUpdateDetails.name, 'FakeRipley');
-                    assert.equal(res.body.data.userUpdateDetails.username, 'ripleyclone22');
-                    assert.equal(res.body.data.userUpdateDetails.description, 'whatever');
+                    const {name, username, description} = res.body.data.userUpdateDetails;
+                    assert.equal(name, 'FakeRipley');
+                    assert.equal(username, 'ripleyclone22');
+                    assert.equal(description, 'whatever');
                     done();
                 })            
         });
@@ -109,7 +111,8 @@ describe('Integration Tests', function() {
                 .send({'query': 'mutation {userFollow(userId: 3, followingId:1, type:"follow") {following}}'})
                 .expect(200)
                 .end((err, res) => {
-                    assert.deepEqual(res.body.data.userFollow.following, [1]);
+                    const {following} = res.body.data.userFollow;
+                    assert.deepEqual(following, [1]);
                     checkUserThatisFollowed(done)
                 });
 
@@ -119,7 +122,8 @@ describe('Integration Tests', function() {
                         .send({'query': 'query {user(id: 1) {followers}}'})
                         .expect(200)
                         .end((err, res) => {
-                            assert.deepEqual(res.body.data.user.followers, [3]);
+                            const {followers} = res.body.data.user;
+                            assert.deepEqual(followers, [3]);
                             unFollow(done)
                         });
                 }                
@@ -130,7 +134,8 @@ describe('Integration Tests', function() {
                         .send({'query': 'mutation {userFollow(userId: 3, followingId:1, type:"unfollow") {following}}'})
                         .expect(200)
                         .end((err, res) => {
-                            assert.deepEqual(res.body.data.userFollow.following, []);
+                            const {following} = res.body.data.userFollow;
+                            assert.deepEqual(following, []);
                             checkUserThatisUnFollowed(done);
                         });
                 }
@@ -141,7 +146,8 @@ describe('Integration Tests', function() {
                         .send({'query': 'query {user(id: 1) {followers}}'})
                         .expect(200)
                         .end((err, res) => {
-                            assert.deepEqual(res.body.data.user.followers, []);
+                            const {followers} = res.body.data.user;
+                            assert.deepEqual(followers, []);
                             done();
                         });
                 }
