@@ -1,5 +1,5 @@
 const { sequelize: { models } } = require('../models');
-const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
+const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList } = require('graphql');
 const { resolver } = require('graphql-sequelize');
 const UserSmallType = require('../users/type2');
 
@@ -12,10 +12,19 @@ module.exports = new GraphQLObjectType({
         },
         storyId: {
             type: new GraphQLNonNull(GraphQLInt),
-        },        
-        users: {
-            type: UserSmallType,
-            resolve: resolver(models.comments.Users)
+        },
+        userId: {
+            type: new GraphQLNonNull(GraphQLInt),
+        },         
+        users: {     
+            type: new GraphQLList(UserSmallType),
+            resolve: function(root, args) {
+                return models.users.findAll({
+                    where: {
+                        id: root.dataValues.userId
+                    }
+                 });
+            }
         },
         comment: {
             type: GraphQLString

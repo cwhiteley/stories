@@ -36,11 +36,11 @@ describe('Integration Tests', function() {
                     .post('/graphql?token=' + token)
                     .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Fri Jun 09 2017", url:"some2.jpg") {url}}'})
                     .end((err, res) => {
-                        checkStories()
+                        checkStories(done)
                     })
                 });
 
-            function checkStories() {
+            function checkStories(done) {
                 server
                     .post('/graphql?token=' + token)
                     .send({'query': 'query {stories(userId: 1) {id,date, storyfragments {url} }}'})
@@ -62,10 +62,10 @@ describe('Integration Tests', function() {
                 .send({'query': 'mutation {storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {storyId,url}}'})
                 .end((err, res) => {
                     storyId = res.body.data.storyFragmentAdd.storyId;
-                        checkStories();
+                    checkStories(done);
                 });
     
-            function checkStories() {
+            function checkStories(done) {
                 server
                     .post('/graphql?token=' + token)
                     .send({'query': `mutation {storyLike(storyId: ${storyId}, likedBy:2) {id,likedBy}}`})

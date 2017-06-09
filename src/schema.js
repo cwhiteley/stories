@@ -10,7 +10,7 @@ const userUpdateDetails = require('./users/mutations/updateDetails');
 const userFollow = require('./users/mutations/follow');
 const storyFragmentAdd = require('./storyfragments/mutations/add');
 const storyFragmentView = require('./storyfragments/mutations/view');
-const storyComment = require('./comments/mutations/add');
+const commentAdd = require('./comments/mutations/add');
 const storyLike = require('./stories/mutations/like');
 
 module.exports = new GraphQLSchema({
@@ -31,7 +31,7 @@ module.exports = new GraphQLSchema({
             userFollow,
             storyFragmentAdd,
             storyFragmentView,
-            storyComment,
+            commentAdd,
             storyLike
         }
     })    

@@ -10,7 +10,7 @@ function getDatabase() {
         case 'test':
         return {
             dbname: 'stories_test',
-            username: 'farz',
+            username: 'qasimf01',
             password: '',
             host: 'localhost'
         };
@@ -26,7 +26,7 @@ function getDatabase() {
         default:
         return {
             dbname: 'stories',
-            username: 'farz',
+            username: 'qasimf01',
             password: '',
             host: 'localhost'
         };             
