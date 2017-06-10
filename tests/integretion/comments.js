@@ -4,7 +4,7 @@ const request = require('supertest');
 const setup = require('./setup');
 let app, server, token;
 
-describe.only('Integration Tests', function() {
+describe('Integration Tests', function() {
 
     beforeEach(function(done) {
         setup().then(() => {
@@ -31,7 +31,7 @@ describe.only('Integration Tests', function() {
             let createdStoryId;
             server
                 .post('/graphql?token=' + token)
-                .send({'query': 'mutation { storyFragmentAdd(userId: 1, date:"Thu Jun 08 2017", url:"some.jpg") {storyId,url}}'})
+                .send({'query': 'mutation { storyFragmentAdd(userId:1, date:"Thu Jun 08 2017", url:"some.jpg") {storyId,url}}'})
                 .expect(200)
                 .end((err, res) => {
                     const {url, storyId} = res.body.data.storyFragmentAdd;
@@ -43,14 +43,54 @@ describe.only('Integration Tests', function() {
             function addComment(done) {
                 server
                     .post('/graphql?token=' + token)
-                    .send({'query': 'mutation { commentAdd(storyId:1, userId:1, comment:"this") {  id, comment }}'})
+                    .send({'query': `mutation { commentAdd(storyId:${createdStoryId}, userId:1, comment:"this is a comment") {  id, comment, user { username } }}`})
                     .expect(200)
                     .end((err, res) => {
-                        console.log(res.body.data.commentAdd);
+                        const {comment, user} = res.body.data.commentAdd;
+                        assert.equal(comment, 'this is a comment');
+                        assert.deepEqual(user, [{"username": "david001"}]);
                         done();
                     });
             }
         });
+
+            it('should be able to query comments', function (done) {
+                let createdStoryId;
+                server
+                    .post('/graphql?token=' + token)
+                    .send({'query': 'mutation { storyFragmentAdd(userId:1, date:"Thu Jun 08 2017", url:"some.jpg") {storyId,url}}'})
+                    .expect(200)
+                    .end((err, res) => {
+                        const {url, storyId} = res.body.data.storyFragmentAdd;
+                        assert.equal(url, 'some.jpg');
+                        createdStoryId = storyId;
+                        addComment(done);
+                    });
+
+                function addComment(done) {
+                    server
+                        .post('/graphql?token=' + token)
+                        .send({'query': `mutation { commentAdd(storyId:${createdStoryId}, userId:1, comment:"this is a comment") {  id, comment, user { username } }}`})
+                        .expect(200)
+                        .end((err, res) => {
+                            queryComment(done);
+                        });
+                }
+
+
+                function queryComment(done) {
+                    server
+                        .post('/graphql?token=' + token)
+                        .send({'query': `query { comments(storyId:${createdStoryId}) {comment,user { username } }}`})
+                        .expect(200)
+                        .end((err, res) => {
+                            const {comment, user} = res.body.data.comments[0];
+                            assert.equal(comment, 'this is a comment');
+                            assert.deepEqual(user, [{"username": "david001"}]);
+                            done();
+                        });
+                }
+            });        
 
     });
 });

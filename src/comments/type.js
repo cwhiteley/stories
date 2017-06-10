@@ -16,12 +16,12 @@ module.exports = new GraphQLObjectType({
         userId: {
             type: new GraphQLNonNull(GraphQLInt),
         },         
-        users: {     
+        user: {     
             type: new GraphQLList(UserSmallType),
             resolve: function(root, args) {
                 return models.users.findAll({
                     where: {
-                        id: root.dataValues.userId
+                        id: root.userId
                     }
                  });
             }

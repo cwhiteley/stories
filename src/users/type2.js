@@ -1,4 +1,3 @@
-const { sequelize: { models } } = require('../models');
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql');
 
 module.exports = new GraphQLObjectType({
