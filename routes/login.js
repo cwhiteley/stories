@@ -6,9 +6,9 @@ const facebook = require('../src/utils/facebook');
 
 const router = express.Router();
 
-function createJWToken(res, id) {
+function createJWToken(res, userObj) {
     const user = {
-        id
+        id: userObj.id
     };
     const token = jwt.sign(user, secret);
     return res.json({
@@ -20,11 +20,11 @@ router.get('/', (req, res, next) => {
     const facebookUser = facebook.init();
     models.users
     .findOrCreate({ where: { facebookID: facebookUser.facebookID }, defaults: facebookUser })
-    .spread((newUser, created) => {
-        const newUserId = newUser.get({
+    .spread((theUser, created) => {
+        const theUserObj = theUser.get({
             plain: true
-        }).id;
-        return createJWToken(res, newUserId);
+        });
+        return createJWToken(res, theUserObj);
     }).catch((err) => {
         return next({
             msg: `unable to find or create user with facebookID ${facebookUser.facebookID}`,

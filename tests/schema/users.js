@@ -4,6 +4,11 @@ const setup = require('../setup');
 const schema = require('../../src/schema.js');
 
 describe('User Schema', function() {
+    let req = {
+        user: {
+            id: 1
+        }
+    };
 
     beforeEach(async () => {
         await setup();
@@ -62,14 +67,14 @@ describe('User Schema', function() {
     it('Mutation: Should let you update user details', async () => {
         const query = `
         mutation { 
-            userUpdateDetails(userId: 1, name:"FakeRipley", desc:"whatever", username:"ripleyclone22") { 
+            userUpdateDetails(name:"FakeRipley", desc:"whatever", username:"ripleyclone22") { 
                 username
                 facebookID,
                 name,
                 description
             }
         }`;
-        const result = await graphql(schema, query, {});
+        const result = await graphql(schema, query, {}, req);
         expect(result).to.deep.equal({
             data: {
                 userUpdateDetails: {
@@ -87,13 +92,14 @@ describe('User Schema', function() {
         async function followUser() {
             const query = `
             mutation { 
-                userFollow(userId: 3, followingId:1, type:"follow") { 
+                userFollow(followingId:1, type:"follow") { 
                     username
                     following
                     followers
                 }
             }`;
-            const result = await graphql(schema, query, {});
+            req.user.id = 3;
+            const result = await graphql(schema, query, {}, req);
             expect(result).to.deep.equal({
                 data: {
                     userFollow: {
@@ -114,7 +120,6 @@ describe('User Schema', function() {
                     followers
                 }
             }`;
-        
             const result2 = await graphql(schema, query2, {});
             expect(result2).to.deep.equal({
                 data: {
@@ -130,13 +135,14 @@ describe('User Schema', function() {
         async function unFollowUser() {
             const query = `
             mutation { 
-                userFollow(userId: 3, followingId:1, type:"unfollow") { 
+                userFollow(followingId:1, type:"unfollow") { 
                     username
                     following
                     followers
                 }
             }`;
-            const result = await graphql(schema, query, {});
+            req.user.id = 3;
+            const result = await graphql(schema, query, {}, req);
             expect(result).to.deep.equal({
                 data: {
                     userFollow: {
@@ -157,7 +163,6 @@ describe('User Schema', function() {
                     followers
                 }
             }`;
-        
             const result2 = await graphql(schema, query2, {});
             expect(result2).to.deep.equal({
                 data: {

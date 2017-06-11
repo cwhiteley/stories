@@ -1,3 +1,5 @@
 module.exports.init = function () {
-    return {};
+    return {
+        facebookID: '003'
+    };
 };

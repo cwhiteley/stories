@@ -20,7 +20,7 @@ router.use(jwt({
 
 router.use('/', graphqlHTTP({
     schema,
-    graphiql: true,
+    graphiql: true
 }));
 
 module.exports = router;

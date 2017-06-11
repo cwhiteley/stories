@@ -1,16 +1,12 @@
 const { sequelize: { models } } = require('../../models');
 const UserType = require('../type');
-const { GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLError } = require('graphql');
+const { GraphQLString, GraphQLError } = require('graphql');
 
 module.exports = {
     type: UserType,
     description: 'Update user description',
     name: 'userUpdateDesc',
     args: {
-        userId: {
-            description: 'ID of the user',
-            type: new GraphQLNonNull(GraphQLInt)
-        },
         name: {
             description: 'Text for the name',
             type: GraphQLString
@@ -24,7 +20,11 @@ module.exports = {
             type: GraphQLString
         }
     },
-    resolve(root, { userId, name, desc, username }) {
+    resolve(root, { name, desc, username }, req) {
+        if (!req.user) {
+            throw new GraphQLError('Invalid JWT Token');
+        }
+        const userId = req.user.id;
         const options = {};
         if (name) {
             options.name = name;

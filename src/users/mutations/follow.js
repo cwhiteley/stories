@@ -7,10 +7,6 @@ module.exports = {
     description: 'Follow a User',
     name: 'userFollow',
     args: {
-        userId: {
-            description: 'ID of the user',
-            type: new GraphQLNonNull(GraphQLInt)
-        },
         followingId: {
             description: 'ID of the user being followed',
             type: new GraphQLNonNull(GraphQLInt)
@@ -20,7 +16,11 @@ module.exports = {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
-    resolve(root, { userId, followingId, type }) {
+    resolve(root, { followingId, type }, req) {
+        if (!req.user) {
+            throw new GraphQLError('Invalid JWT Token');
+        }
+        const userId = req.user.id;
         // update following column for user
         let usersCache;
         const alreadyFollowingArray = models.users
