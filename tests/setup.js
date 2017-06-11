@@ -1,6 +1,6 @@
 var proxyquire =  require('proxyquire');
 const path = require('path');
-var db = require('../../src/models');
+var db = require('../src/models');
 
 module.exports = function() {
     const facebookStub = {
@@ -14,12 +14,12 @@ module.exports = function() {
             }
         };
 
-        proxyquire(path.join(__dirname, '../', '../', 'routes', 'login.js'), {
+        proxyquire(path.join(__dirname, '../', 'routes', 'login.js'), {
             '../src/utils/facebook': facebookStub
         });
 
         return db.connect({force: true}).then(()=> {
-             return populate();
+            return populate();
         }).catch((e) => {
             console.log('Error connecting to DB/populating ', e);
             return Promise.reject();

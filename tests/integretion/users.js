@@ -3,7 +3,8 @@ const assert = require('assert');
 const request = require('supertest');
 const setup = require('./setup');
 let app, server, token;
-
+       const {graphql} = require('graphql');
+            const schema = require('../../src/schema.js');
 describe('Integration Tests', function() {
 
     beforeEach(function(done) {

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "supervisor -watch src,routes,bin node ./bin/www",
     "start": "node ./bin/www",
-    "test": "NODE_ENV=test node_modules/.bin/mocha tests/integretion/*.js"
+    "test": "NODE_ENV=test node_modules/.bin/mocha tests/schema/*.js"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "sequelize": "^3.30.4"
   },
   "devDependencies": {
+    "chai": "^4.0.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-config-airbnb-base": "^11.2.0",
