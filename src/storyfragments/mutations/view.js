@@ -1,5 +1,5 @@
 const { sequelize: { models } } = require('../../models');
-const StoryFragmentsType  = require('../type');
+const StoryFragmentsType = require('../type');
 const { GraphQLNonNull, GraphQLInt, GraphQLError } = require('graphql');
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
             type: new GraphQLNonNull(GraphQLInt)
         }
     },
-    resolve: function(root, {storyFragId, viewedBy}) {
+    resolve(root, { storyFragId, viewedBy }) {
         let storyFragCache;
         const alreadyViewedArray = models.storyfragments
         .findById(storyFragId)
@@ -26,7 +26,7 @@ module.exports = {
                 plain: true
             }).viewedBy;
         }).catch((err) => {
-           throw new GraphQLError(err.errors[0].message || err.message || 'story fragment not found');
+            throw new GraphQLError(err.errors[0].message || err.message || 'story fragment not found');
         });
 
         return alreadyViewedArray.then((viewedArray) => {
@@ -42,15 +42,15 @@ module.exports = {
                     returning: true,
                     raw: true,
                 }).then((result) => {
-                    /* could use sequilize resolver here to return a join query, but not sure if its needed yet ? */
+                    /* could use sequilize resolver here to return a join query, but not sure if
+                    its needed yet ? */
                     return result[1][0];
                 }).catch((err) => {
-                    throw new GraphQLError(err.errors[0].message || err.message ||'error updating viewedBy for story fragment');
+                    throw new GraphQLError(err.errors[0].message || err.message || 'error updating viewedBy for story fragment');
                 });
-            } else {
-                return storyFragCache;
             }
-        })
+            return storyFragCache;
+        });
     }
 };
- 
+

@@ -1,13 +1,6 @@
-module.exports = {
-    database: getDatabase(),
-    jwt: {
-        secret: 'tempSecret'
-    }
-}
-
 function getDatabase() {
-    switch(process.env.NODE_ENV) {
-        case 'test':
+    switch (process.env.NODE_ENV) {
+    case 'test':
         return {
             dbname: 'stories_test',
             username: 'farz',
@@ -15,7 +8,7 @@ function getDatabase() {
             host: 'localhost'
         };
 
-        case 'production':
+    case 'production':
         return {
             dbname: 'stories',
             username: 'xxx',
@@ -23,12 +16,19 @@ function getDatabase() {
             host: 'xxx'
         };
 
-        default:
+    default:
         return {
             dbname: 'stories',
             username: 'farz',
             password: '',
             host: 'localhost'
-        };             
+        };
     }
 }
+
+module.exports = {
+    database: getDatabase(),
+    jwt: {
+        secret: 'tempSecret'
+    }
+};

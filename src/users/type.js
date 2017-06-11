@@ -8,26 +8,26 @@ module.exports = new GraphQLObjectType({
     description: 'User details',
     fields: {
         id: {
-            type: new GraphQLNonNull(GraphQLInt),
+            type: new GraphQLNonNull(GraphQLInt)
         },
         facebookID: {
-            type: new GraphQLNonNull(GraphQLInt),
+            type: new GraphQLNonNull(GraphQLInt)
         },
         name: {
-            type: GraphQLString,
+            type: GraphQLString
         },
         username: {
-            type: GraphQLString,
+            type: GraphQLString
         },
         description: {
-            type: GraphQLString,
+            type: GraphQLString
         },
         followers: {
-            type: new GraphQLList(GraphQLInt),
+            type: new GraphQLList(GraphQLInt)
         },
         following: {
-            type: new GraphQLList(GraphQLInt),
-        },        
+            type: new GraphQLList(GraphQLInt)
+        },
         story: {
             type: new GraphQLList(StoriesType),
             resolve: resolver(models.users.Stories)

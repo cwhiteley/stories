@@ -16,7 +16,7 @@ module.exports = {
             type: new GraphQLNonNull(GraphQLInt)
         }
     },
-    resolve: function(root, {storyId, likedBy}) {
+    resolve(root, { storyId, likedBy }) {
         let storyCache;
         const alreadyLikedArray = models.stories
         .findById(storyId)
@@ -42,14 +42,14 @@ module.exports = {
                     returning: true,
                     raw: true,
                 }).then((result) => {
-                    /* could use sequilize resolver here to return a join query, but not sure if its needed yet ? */
+                    /* could use sequilize resolver here to return a join query, but not sure if
+                    its needed yet ? */
                     return result[1][0];
                 }).catch((err) => {
                     throw new GraphQLError(err.errors[0].message || err.message || 'error updating likedby array for story');
                 });
-            } else {
-                return storyCache;
             }
-        })
+            return storyCache;
+        });
     }
 };

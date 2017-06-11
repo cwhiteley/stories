@@ -20,13 +20,13 @@ module.exports = {
             type: GraphQLString
         }
     },
-    resolve: function(root, {storyId, userId, comment}) {
+    resolve(root, { storyId, userId, comment }) {
         return models.comments.create({
-             storyId: storyId,
-             userId: userId,
-             comment: comment
+            storyId,
+            userId,
+            comment
         }).then((result) => {
-          return result.get({
+            return result.get({
                 plain: true
             });
         }).catch((err) => {

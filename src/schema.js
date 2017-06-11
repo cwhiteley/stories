@@ -34,5 +34,5 @@ module.exports = new GraphQLSchema({
             commentAdd,
             storyLike
         }
-    })    
-})
+    }),
+});

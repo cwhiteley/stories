@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         classMethods: {
-            associate: function (models) {
+            associate(models) {
                 Stories.Users = Stories.belongsTo(models.users);
                 Stories.StoryFragments = Stories.hasMany(models.storyfragments);
                 Stories.Comments = Stories.hasMany(models.comments);

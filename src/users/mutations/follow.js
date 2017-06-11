@@ -18,10 +18,10 @@ module.exports = {
         type: {
             description: 'follow or unfollow',
             type: new GraphQLNonNull(GraphQLString)
-        }        
+        }
     },
-    resolve: function(root, {userId, followingId, type}) {
-        //update following column for user
+    resolve(root, { userId, followingId, type }) {
+        // update following column for user
         let usersCache;
         const alreadyFollowingArray = models.users
         .findById(userId)
@@ -32,7 +32,7 @@ module.exports = {
             }).following;
         }).catch((err) => {
             throw new GraphQLError('user not found');
-        });    
+        });
 
         return alreadyFollowingArray.then((followingArray) => {
             if (followingArray.indexOf(followingId) > -1 && type === 'follow') {
@@ -41,8 +41,8 @@ module.exports = {
 
             if (followingArray.indexOf(followingId) === -1 && type === 'unfollow') {
                 return Promise.resolve(usersCache);
-            }            
-            
+            }
+
             return models.users
             .update({
                 following: updateArray(type, followingArray, followingId)
@@ -62,7 +62,7 @@ module.exports = {
         });
 
 
-        //update followers column for followingId
+        // update followers column for followingId
         function updateFollowers() {
             const alreadyFollowersArray = models.users
             .findById(followingId)
@@ -79,8 +79,8 @@ module.exports = {
 
                 if (followersArray.indexOf(userId) === -1 && type === 'unfollow') {
                     return Promise.resolve();
-                }                
-                
+                }
+
                 return models.users
                 .update({
                     followers: updateArray(type, followersArray, userId)
@@ -91,7 +91,6 @@ module.exports = {
                     returning: true,
                     raw: true,
                 });
-      
             });
         }
     }
@@ -99,12 +98,12 @@ module.exports = {
 
 function updateArray(type, arr, val) {
     if (type === 'follow') {
-        return arr.concat(val); 
+        return arr.concat(val);
     }
 
     if (type === 'unfollow') {
-         return arr.filter((item) => {
-	        return item !== val;
+        return arr.filter((item) => {
+            return item !== val;
         });
-    } 
+    }
 }

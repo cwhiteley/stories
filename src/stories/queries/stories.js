@@ -1,6 +1,6 @@
 const { sequelize: { models } } = require('../../models');
 const StoriesType = require('../type');
-const { GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList } = require('graphql');
+const { GraphQLInt, GraphQLString, GraphQLList } = require('graphql');
 const { resolver } = require('graphql-sequelize');
 
 module.exports = {
@@ -20,3 +20,4 @@ module.exports = {
     },
     resolve: resolver(models.stories)
 }
+;

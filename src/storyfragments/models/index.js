@@ -13,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         classMethods: {
-            associate: function (models) {
+            associate(models) {
                 StoryFragments.Stories = StoryFragments.belongsTo(models.stories);
             }
         },
@@ -21,7 +21,7 @@ module.exports = function (sequelize, DataTypes) {
             {
                 fields: ['storyId']
             }
-        ]        
+        ]
     });
 
     return StoryFragments;

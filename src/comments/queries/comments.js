@@ -13,4 +13,4 @@ module.exports = {
         }
     },
     resolve: resolver(models.comments)
-}
+};

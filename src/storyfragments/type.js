@@ -1,6 +1,4 @@
-const { sequelize: { models } } = require('../models');
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLList } = require('graphql');
-const { resolver } = require('graphql-sequelize');
 
 module.exports = new GraphQLObjectType({
     name: 'StoryFragments',
@@ -11,7 +9,7 @@ module.exports = new GraphQLObjectType({
         },
         storyId: {
             type: new GraphQLNonNull(GraphQLInt),
-        },        
+        },
         date: {
             type: GraphQLString,
         },

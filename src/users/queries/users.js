@@ -1,6 +1,6 @@
 const { sequelize: { models } } = require('../../models');
 const UserType = require('../type');
-const { GraphQLList, GraphQLNonNull, GraphQLInt } = require('graphql');
+const { GraphQLList, GraphQLInt } = require('graphql');
 const { resolver } = require('graphql-sequelize');
 
 module.exports = {
@@ -13,4 +13,4 @@ module.exports = {
         }
     },
     resolve: resolver(models.users)
-}
+};

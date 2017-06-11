@@ -1,9 +1,10 @@
-var express = require('express');
+const express = require('express');
 const jwt = require('jsonwebtoken');
-var router = express.Router();
 const { sequelize: { models } } = require('../src/models.js');
-const  { jwt: {secret} } = require('../src/utils/config');
+const { jwt: { secret } } = require('../src/utils/config');
 const facebook = require('../src/utils/facebook');
+
+const router = express.Router();
 
 function createJWToken(res, id) {
     const user = {
@@ -15,22 +16,22 @@ function createJWToken(res, id) {
     });
 }
 
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
     const facebookUser = facebook.init();
     models.users
-    .findOrCreate({where: {facebookID: facebookUser.facebookID}, defaults: facebookUser})
+    .findOrCreate({ where: { facebookID: facebookUser.facebookID }, defaults: facebookUser })
     .spread((newUser, created) => {
-         const newUserId = newUser.get({
+        const newUserId = newUser.get({
             plain: true
         }).id;
         return createJWToken(res, newUserId);
     }).catch((err) => {
         return next({
-            msg: `unable to find or create user with facebookID ${facebookID}`,
+            msg: `unable to find or create user with facebookID ${facebookUser.facebookID}`,
             statusCode: 500,
             err
         });
-    });    
+    });
 });
 
 module.exports = router;

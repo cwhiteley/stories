@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
         comment: DataTypes.TEXT
     }, {
         classMethods: {
-            associate: function (models) {
+            associate(models) {
                 Comments.Stories = Comments.belongsTo(models.stories);
                 Comments.Users = Comments.belongsTo(models.users);
             }
@@ -17,7 +17,7 @@ module.exports = function (sequelize, DataTypes) {
             {
                 fields: ['storyId']
             }
-        ]  
+        ]
     });
 
     return Comments;

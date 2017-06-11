@@ -1,4 +1,3 @@
-module.exports.init = function(){
-    return {
-    };
-}
+module.exports.init = function () {
+    return {};
+};

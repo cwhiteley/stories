@@ -22,10 +22,10 @@ module.exports = function (sequelize, DataTypes) {
         following: {
             type: DataTypes.ARRAY(DataTypes.INTEGER),
             defaultValue: []
-        }        
+        }
     }, {
         classMethods: {
-            associate: function (models) {
+            associate(models) {
                 Users.Stories = Users.hasMany(models.stories);
                 Users.Comments = Users.hasMany(models.comments);
             }
@@ -33,9 +33,9 @@ module.exports = function (sequelize, DataTypes) {
         indexes: [
             {
                 unique: true,
-                fields: ['id', 'username'] //maybe facebookID is better?
+                fields: ['id', 'username'] // maybe facebookID is better?
             }
-        ]        
+        ]
     });
 
     return Users;

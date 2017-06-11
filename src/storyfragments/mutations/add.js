@@ -15,15 +15,15 @@ module.exports = {
         date: {
             description: 'todays date',
             type: GraphQLString
-        },           
+        },
         url: {
             description: 'S3 Url for image/video',
             type: GraphQLString
         }
     },
-    resolve: function(root, {userId, date, url}) {
+    resolve(root, { userId, date, url }) {
         const getStoryId = models.stories
-        .findOrCreate({where: {userId: userId, date: date}})
+        .findOrCreate({ where: { userId, date } })
         .spread((story, created) => {
             return story.get({
                 plain: true
@@ -35,9 +35,9 @@ module.exports = {
         return getStoryId.then((storyId) => {
             return models.storyfragments
             .create({
-                storyId:storyId,
-                date: date,
-                url: url
+                storyId,
+                date,
+                url
             }).then((storyCreated) => {
                 return storyCreated.get({
                     plain: true

@@ -5,13 +5,13 @@ module.exports = new GraphQLObjectType({
     description: 'Few User details',
     fields: {
         id: {
-            type: new GraphQLNonNull(GraphQLInt),
+            type: new GraphQLNonNull(GraphQLInt)
         },
         facebookID: {
-            type: new GraphQLNonNull(GraphQLInt),
+            type: new GraphQLNonNull(GraphQLInt)
         },
         username: {
-            type: GraphQLString,
+            type: GraphQLString
         }
-    }      
+    }
 });

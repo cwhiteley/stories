@@ -22,10 +22,10 @@ module.exports = {
         username: {
             description: 'Text for the username',
             type: GraphQLString
-        }        
+        }
     },
-    resolve: function(root, {userId, name, desc, username}) {
-        let options = {};
+    resolve(root, { userId, name, desc, username }) {
+        const options = {};
         if (name) {
             options.name = name;
         }
@@ -41,15 +41,15 @@ module.exports = {
             where: {
                 id: userId
             },
-             returning: true,
-             raw: true,
+            returning: true,
+            raw: true,
         }).then((result) => {
             if (!result[1].length) {
-               throw new GraphQLError("user not found");
+                throw new GraphQLError('user not found');
             }
             return result[1][0];
         }).catch((err) => {
-            throw new GraphQLError(err.errors[0].message || err.message ||  'error updating user details'); 
+            throw new GraphQLError(err.errors[0].message || err.message || 'error updating user details');
         });
     }
 };
